@@ -1,0 +1,52 @@
+#!/bin/bash
+
+## Base
+BASEDIR=/opt/james/
+NTPDATE=/usr/sbin/ntpdate-debian
+
+## BOT
+BOTDIR=$BASEDIR/bot
+PYTHON=/usr/bin/python
+BOTFORCERESTART=/tmp/restart_james.tmp
+
+## Alert Settings (XMPP)
+ALERT=$BASEDIR/scripts/alert.sh
+AUSER=alert
+ADOMAIN=
+APASS=
+ATARGET=
+ALOG=/tmp/james.alert.log
+SPKAGENT=/usr/bin/espeak
+
+## Rsync options
+RSYNCPATH=/usr/bin/rsync
+RSYNCPW=
+RSYNCCMD="USER@HOST::PATH"
+
+## Proximity Setting
+# You'll need to use the MAC address of your phone here
+DEVICE=""
+# The Computers MAC address
+COMPUTER=""
+NETINTERFACE="eth0" #this hosts network interface
+ETHERWAKE="/usr/sbin/etherwake -i $NETINTERFACE"
+HCITOOL="/usr/bin/hcitool"
+PSTATEFILE=/tmp/prx_state.dat
+PDBGLOG="/tmp/james.proximity.log"
+LOG="/var/log/james.log"
+# Proximity timeouts
+PLONG=900
+PSHORT=30
+
+## Scan Host Settings
+MACVENDORFILE=$BASEDIR/settings/oui.txt
+NMAPPATH=/usr/bin/nmap
+NEWFILE=$BASEDIR/data/whoisonline.new
+ARPSCAN=/usr/bin/arp-scan
+
+## Who is online
+PHPPATH=/usr/bin/php
+WHOISONLINE=$BASEDIR/scripts/whoisonline.sh
+
+## Email settings
+EMAIL=
