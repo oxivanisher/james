@@ -114,7 +114,7 @@ case "$1" in
         ;;
 
         periodic)
-            $BASEDIR/scripts/whoisonline.sh >/dev/null 2>&1
+            $WHOISONLINE >/dev/null 2>&1
             if [ -f $BOTFORCERESTART ];
             then
                 JAMESCHECK=$(ps -ef | grep "python ./james.py" | grep -v grep | awk '{ print $2 }')
