@@ -1,5 +1,5 @@
 #!/bin/bash
 
-. /opt/james/settings/settings.sh
+source /opt/james/settings/settings.sh
 
-$PHPPATH $BASEDIR/scripts/whoisonline.php $@
+/usr/bin/env php $BASEDIR/scripts/whoisonline.php "$@"

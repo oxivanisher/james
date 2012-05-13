@@ -37,12 +37,14 @@ function save_csv($file, $line) {
 $db = null;
 foreach (load_csv($dbfile) as $entry) {
     $mac = strtolower($entry[1]);
-    $db[$mac][0] = $entry[0]; #type
-    $db[$mac][1] = $entry[2]; #comment
-    $db[$mac][2] = $entry[3]; #hidden
-    $db[$mac][3] = $entry[4]; #owner
-    $db[$mac][4] = "0.0.0.0"; #online/ip
-    $db[$mac][5] = $mac;      #MAC
+    if ((!empty($entry[4])) && (!empty($mac))) {
+        $db[$mac][0] = $entry[0]; #type
+        $db[$mac][1] = $entry[2]; #comment
+        $db[$mac][2] = $entry[3]; #hidden
+        $db[$mac][3] = $entry[4]; #owner
+        $db[$mac][4] = "0.0.0.0"; #online/ip
+        $db[$mac][5] = $mac;      #MAC
+    }
 }
 
 # scan for devices
@@ -57,13 +59,13 @@ foreach ($onlinemacs as $onlinemacsLine) {
                 # this is a unknown mac. save it
                 $db[$tmpmac][0] = "unknown";           #type
                 $db[$tmpmac][1] = date('Y-m-d H:i:s'); #comment
-                $db[$tmpmac][2] = false;               #hidden
-                $db[$tmpmac][3] = "unknown";           #owner
+                $db[$tmpmac][2] = 0;                   #hidden
+                $db[$tmpmac][3] = "nobody";            #owner
                 $db[$tmpmac][4] = $out[0];             #online/ip
-                save_csv($dbfile, "\n" . $type . ";" . $mac . ";" . $comment . " " . date('Y-m-d H:i:s') . ";0;");
+                save_csv($dbfile, "\n" . $db[$tmpmac][0] . ";" . $tmpmac . ";" . $db[$tmpmac][1] . ";" . $db[$tmpmac][2] . ";" . $db[$tmpmac][3]);
 
                 # notify about and scan that thing
-                exec($new_event . $tmpmac . " " . $out[0] . " &");
+                exec($new_event . " alert \"unknown host detected!\" " . $db[$tmpmac][4] . " (" . $tmpmac . ")");
             } else {
                 # this already known device is online
                 $db[$tmpmac][4] = $out[0]; #online/ip

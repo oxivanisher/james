@@ -1,52 +1,41 @@
 #!/bin/bash
 
-## Base
-BASEDIR=/opt/james/
-NTPDATE=/usr/sbin/ntpdate-debian
-
-## BOT
-BOTDIR=$BASEDIR/bot
-PYTHON=/usr/bin/python
-BOTFORCERESTART=/tmp/restart_james.tmp
+## Base Settings
+BASEDIR="/opt/james/"
+TMPDIR="/tmp"
+MAINLOG="/var/log/james.log"
 
 ## Alert Settings (XMPP)
-ALERT=$BASEDIR/scripts/alert.sh
-AUSER=alert
-ADOMAIN=
-APASS=
-ATARGET=
-ALOG=/tmp/james.alert.log
-SPKAGENT=/usr/bin/espeak
+XMPPUSER="alert"
+XMPPDOMAIN=""
+XMPPPASS=""
+XMPPTARGET=""
 
 ## Rsync options
-RSYNCPATH=/usr/bin/rsync
 RSYNCPW=
-RSYNCCMD="USER@HOST::PATH"
+RSYNCTARGET="USER@HOST::PATH"
 
 ## Proximity Setting
 # You'll need to use the MAC address of your phone here
-DEVICE=""
+PINGDEVICEMAC=""
 # The Computers MAC address
-COMPUTER=""
-NETINTERFACE="eth0" #this hosts network interface
-ETHERWAKE="/usr/sbin/etherwake -i $NETINTERFACE"
-HCITOOL="/usr/bin/hcitool"
-PSTATEFILE=/tmp/prx_state.dat
-PDBGLOG="/tmp/james.proximity.log"
-LOG="/var/log/james.log"
+COMPUTERMAC=""
+# The Computers network interface
+NETINTERFACE="eth0"
 # Proximity timeouts
 PLONG=900
 PSHORT=30
 
-## Scan Host Settings
-MACVENDORFILE=$BASEDIR/settings/oui.txt
-NMAPPATH=/usr/bin/nmap
-NEWFILE=$BASEDIR/data/whoisonline.new
-ARPSCAN=/usr/bin/arp-scan
-
-## Who is online
-PHPPATH=/usr/bin/php
-WHOISONLINE=$BASEDIR/scripts/whoisonline.sh
-
 ## Email settings
 EMAIL=
+
+## Internal Paths (you probably won't have to change them)
+BOTDIR="$BASEDIR/bot"
+ALERT="$BASEDIR/scripts/alert.sh"
+MACVENDORFILE="$BASEDIR/data/oui.txt"
+NEWFILE="$BASEDIR/data/whoisonline.new"
+WHOISONLINE="$BASEDIR/scripts/whoisonline.sh"
+PSTATEFILE="$TMPDIR/prx_state.dat"
+PDBGLOG="$TMPDIR/james.proximity.log"
+BOTFORCERESTART="$TMPDIR/restart_james.tmp"
+ALERTLOG="$TMPDIR/james.alert.log"

@@ -1,8 +1,8 @@
 #!/bin/bash
 
-. /opt/james/settings/settings.sh
-. /opt/james/include/func.proximity.sh
-. /opt/james/include/func.scanhost.sh
+source /opt/james/settings/settings.sh
+source $BASEDIR/include/func.proximity.sh
+source $BASEDIR/include/func.scanhost.sh
 
 if [ -f $PSTATEFILE ];
 then
@@ -11,12 +11,11 @@ else
     touch $PSTATEFILE
 fi
 
-
 case "$1" in
 	#cam events
 	cam_dc)
 		$ALERT "Cam disconnected"
-		echo -e "event(cam_dc) $2 $(date +%H:%M:%S)" >> $LOG
+		echo -e "event(cam_dc) $2 $(date +%H:%M:%S)" >> $MAINLOG
 	;;
 
 	cam_mov)
@@ -25,7 +24,7 @@ case "$1" in
 			rm $2
 		else
 			$ALERT "Movement detected" &
-       			echo -e "event(cam_mov) $2 $(date +%H:%M:%S)" >> $LOG
+       			echo -e "event(cam_mov) $2 $(date +%H:%M:%S)" >> $MAINLOG
        	fi
 		transfer_file $2 &
 	;;
@@ -36,7 +35,7 @@ case "$1" in
 			rm $2
 		else
 #			uuencode ${2} $(basename ${2}) | mail -s "Cam image event detected $(date +%H:%M:%S)" $EMAIL &
-			echo -e "event(cam_img) $2 $(date +%H:%M:%S)" >> $LOG
+			echo -e "event(cam_img) $2 $(date +%H:%M:%S)" >> $MAINLOG
 		fi
 		transfer_file $2 &
 	;;
@@ -46,18 +45,18 @@ case "$1" in
 	prx_at_home)
 		echo 1 > $PSTATEFILE
 		/etc/init.d/motion stop >/dev/null 2>&1
-		$ETHERWAKE $COMPUTER
-		echo -e "event(prx_at_home) $2 $(date +%H:%M:%S)" >> $LOG
+		/usr/bin/env etherwake -i $NETINTERFACE $COMPUTERMAC
+		echo -e "event(prx_at_home) $2 $(date +%H:%M:%S)" >> $MAINLOG
 	;;
 
 	prx_went_away)
 		echo 0 > $PSTATEFILE
 		/etc/init.d/motion start >/dev/null 2>&1
-		echo -e "event(prx_went_away) $2 $(date +%H:%M:%S)" >> $LOG
+		echo -e "event(prx_went_away) $2 $(date +%H:%M:%S)" >> $MAINLOG
 	;;
 
 	sys_startup)
-		echo -e "event(sys_startup) $2 $(date +%H:%M:%S)" >> $LOG
+		echo -e "event(sys_startup) $2 $(date +%H:%M:%S)" >> $MAINLOG
 		echo -e "\n\n\nJames system bot for beagleboard. Powered by oXi:"
 		echo -e "\tCreating tmp directory"
 		mkdir -p /tmp/motion/
@@ -83,13 +82,13 @@ case "$1" in
 
 	sys_reboot)
 		$ALERT "$(hostname) is rebooting"
-		echo -e "event(sys_reboot) by $(whoami) $(date +%H:%M:%S) $2" >> $LOG
+		echo -e "event(sys_reboot) by $(whoami) $(date +%H:%M:%S) $2" >> $MAINLOG
 		reboot &
 	;;
 
 	sys_poweroff)
 		$ALERT "$(hostname) is powering down"
-		echo -e "event(sys_poweroff) by $(whoami) $(date +%H:%M:%S) $2" >> $LOG
+		echo -e "event(sys_poweroff) by $(whoami) $(date +%H:%M:%S) $2" >> $MAINLOG
 		poweroff &
 	;;
 
@@ -106,7 +105,7 @@ case "$1" in
         ;;
 
        arp_scan)
-            $ARPSCAN -I $NETINTERFACE -q --localnet | sort -t . -k 1,1n -k 2,2n -k 3,3n -k 4,4n
+            /usr/bin/env arp-scan -I $NETINTERFACE -q --localnet | sort -t . -k 1,1n -k 2,2n -k 3,3n -k 4,4n
         ;;
 
 

@@ -12,7 +12,7 @@ OLDPWD=$(pwd)
 cd $BOTDIR
 while true; do
 	echo -e "XMPP Daemon starting. Hit ctrl+c for clean shutdown"
-	python ./james.py
+	/usr/bin/env python ./james.py
 	echo -e "Press ctrl+c again within the next 10 seconds for definitive shutdown"
 	sleep 5
 done

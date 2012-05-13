@@ -2,11 +2,11 @@
 #set -o verbose sh -v
 # Copied from Steven on http://gentoo-wiki.com/Talk:TIP_Bluetooth_Proximity_Monitor
 
-. /opt/james/settings/settings.sh
-. /opt/james/include/func.proximity.sh
+source  /opt/james/settings/settings.sh
+source  $BASEDIR/include/func.proximity.sh
 
 echo -e "\nJames is syncing time before we start to serve you"
-$NTPDATE >/dev/null 2>&1
+/usr/bin/env ntpdate-debian >/dev/null 2>&1
 
 echo -e "\nJames Proximity monitor is now starting"
 $ALERT "James proximity monitor active" &
@@ -18,7 +18,7 @@ while /bin/true; do
     if [[ $(check_pconnection) -eq 1 ]];
     then
 	PONLINE=1
-	echo -e "DEBUG: $(date) $DEVICE online" >> $PDBGLOG
+	echo -e "DEBUG: $(date) $PINGDEVICEMAC online" >> $PDBGLOG
 
 	if [ $STATE -ne "1" ];
 	then
@@ -34,22 +34,22 @@ while /bin/true; do
 
 	while [[ $PONLINE -eq 1 ]]; do
 	    if [[ $(check_pconnection) -eq 1 ]]; then
-		echo -e "DEBUG: $(date) $DEVICE still online" >> $PDBGLOG
+		echo -e "DEBUG: $(date) $PINGDEVICEMAC still online" >> $PDBGLOG
 		sleep $PLONG
 	    else
 		PONLINE=0
-		echo -e "DEBUG: $(date) $DEVICE not longer online." >> $PDBGLOG
+		echo -e "DEBUG: $(date) $PINGDEVICEMAC not longer online." >> $PDBGLOG
 		sleep $PSHORT
 	    fi
 	done
     else
 	PONLINE=0
-	echo -e "DEBUG: $(date) $DEVICE offline, short wait loop" >> $PDBGLOG
+	echo -e "DEBUG: $(date) $PINGDEVICEMAC offline, short wait loop" >> $PDBGLOG
 
 	if [ $STATE -ne "0" ];
 	then
 		cd $BOTDIR
-		ONLINE=$(scripts/whoisonline.php)
+		ONLINE=$($WHOISONLINE)
 		cd $INPWD
 		$ALERT "You left. Perimeter defence enabled" &
 		STATE=0
