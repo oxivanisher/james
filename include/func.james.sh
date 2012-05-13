@@ -50,20 +50,15 @@ function check_files {
     fi
 }
 
-function start_daemons {
-    echo -e -n "\tChecking daemons: "
-    if [ "$(/usr/bin/env screen -ls | grep proximity-daemon)a" == "a" ];
+function start_daemon {
+    if [ -f "$BASEDIR/daemon.$1.sh" ];
     then
-        echo -e -n "proximity-daemon ";
-        /usr/bin/env screen -dmS proximity-daemon $BASEDIR/daemon.proximity.sh
+        if [ "$(/usr/bin/env screen -ls | grep james-$1-daemon)a" == "a" ];
+        then
+            echo -e -n "$1 ";
+            /usr/bin/env screen -dmS james-$1-daemon $BASEDIR/daemon.$1.sh
+        fi
     fi
-
-    if [ "$(/usr/bin/env screen -ls | grep xmpp-daemon)a" == "a" ];
-    then
-        echo -e -n "xmpp-daemon ";
-        /usr/bin/env screen -dmS xmpp-daemon $BASEDIR/daemon.xmpp.sh &
-    fi
-    echo -e "> done"
 }
 
 function wait_for_lock {

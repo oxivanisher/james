@@ -10,7 +10,69 @@ else
 fi
 
 case "$1" in
-    #cam events
+
+
+    ## System events
+    sys_reboot)
+        alert "$(hostname) is rebooting"
+        echo -e "event(sys_reboot) by $(whoami) $(date +%H:%M:%S) $2" >> $MAINLOG
+        reboot &
+    ;;
+
+    sys_poweroff)
+        alert "$(hostname) is powering down"
+        echo -e "event(sys_poweroff) by $(whoami) $(date +%H:%M:%S) $2" >> $MAINLOG
+        poweroff &
+    ;;
+
+    sys_startup)
+        echo -e "event(sys_startup) $2 $(date +%H:%M:%S)" >> $MAINLOG
+        /usr/bin/env ntpdate-debian >/dev/null 2>&1
+    start)
+        echo -e "James: Your Buttler startup"
+
+        echo -e -n "\tChecking for needed files: "
+        check_files || exit 1
+        echo -e "> done"
+
+        if [[ ! -d "$MOTIONDIR" ]];
+        then
+            echo -e "\tCreating tmp directory"
+            mkdir -p $MOTIONDIR
+        fi
+        chmod 777 $MOTIONDIR
+
+        echo -e -n "\tChecking daemons: "
+        start_daemon jabber
+        start_daemon alert
+        start_daemon proximity
+        echo -e "> done"
+
+        echo -e "\t=> Everything is running now\n"
+        exit 0
+    ;;
+
+    periodic)
+        $WHOISONLINE >/dev/null 2>&1
+
+        start_daemon jabber >/dev/null 2>&1
+        start_daemon alert >/dev/null 2>&1
+        start_daemon proximity >/dev/null 2>&1
+
+        if [ -f $BOTFORCERESTART ];
+        then
+            JAMESCHECK=$(ps -ef | grep "python ./james.py" | grep -v grep | awk '{ print $2 }')
+            if [ "a" != "a$JAMESCHECK" ];
+            then
+                alert "Restarting Sir James forced"
+                kill $JAMESCHECK
+            fi
+            rm $BOTFORCERESTART
+        fi
+    ;;
+
+
+    ##Cam events
     cam_dc)
         alert "Cam disconnected"
         echo -e "event(cam_dc) $2 $(date +%H:%M:%S)" >> $MAINLOG
@@ -39,7 +101,7 @@ case "$1" in
     ;;
 
 
-    #proximity events
+    ## Proximity events
     prx_at_home)
         echo 1 > $PSTATEFILE
         /etc/init.d/motion stop >/dev/null 2>&1
@@ -53,41 +115,8 @@ case "$1" in
         echo -e "event(prx_went_away) $2 $(date +%H:%M:%S)" >> $MAINLOG
     ;;
 
-    sys_startup|start)
-        echo -e "event(sys_startup) $2 $(date +%H:%M:%S)" >> $MAINLOG
-        echo -e "James: Your Buttler startup (syncing time, please wait)"
-        /usr/bin/env ntpdate-debian >/dev/null 2>&1
 
-        echo -e -n "\tChecking for needed files: "
-        check_files || exit 1
-        echo -e "> done"
-
-        if [[ ! -d "$MOTIONDIR" ]];
-        then
-            echo -e "\tCreating tmp directory"
-            mkdir -p $MOTIONDIR
-        fi
-        chmod 777 $MOTIONDIR
-
-        start_daemons
-
-        echo -e "\t=> Everything is running now\n"
-        exit 0
-    ;;
-
-
-    sys_reboot)
-        alert "$(hostname) is rebooting"
-        echo -e "event(sys_reboot) by $(whoami) $(date +%H:%M:%S) $2" >> $MAINLOG
-        reboot &
-    ;;
-
-    sys_poweroff)
-        alert "$(hostname) is powering down"
-        echo -e "event(sys_poweroff) by $(whoami) $(date +%H:%M:%S) $2" >> $MAINLOG
-        poweroff &
-    ;;
-
+    ## Proximity events
     scan_host)
         function run {
             DATE=$(date)
@@ -103,30 +132,12 @@ case "$1" in
         /usr/bin/env arp-scan -I $NETINTERFACE -q --localnet | sort -t . -k 1,1n -k 2,2n -k 3,3n -k 4,4n
     ;;
 
-
     alert)
         alert $@
     ;;
 
-    periodic)
-        $WHOISONLINE >/dev/null 2>&1
-
-        start_daemons >/dev/null 2>&1
-
-        if [ -f $BOTFORCERESTART ];
-        then
-            JAMESCHECK=$(ps -ef | grep "python ./james.py" | grep -v grep | awk '{ print $2 }')
-            if [ "a" != "a$JAMESCHECK" ];
-            then
-                alert "Restarting Sir James forced"
-                kill $JAMESCHECK
-            fi
-            rm $BOTFORCERESTART
-        fi
-    ;;
-
-    #default event
+    ## Default event
     *)
-        echo "error, please specify a command"
+        echo "error, please specify a event"
     ;;
 esac
