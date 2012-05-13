@@ -1,12 +1,6 @@
 #!/bin/bash
-#set -o verbose sh -v
-# Copied from Steven on http://gentoo-wiki.com/Talk:TIP_Bluetooth_Proximity_Monitor
-
-source  /opt/james/settings/settings.sh
-source  $BASEDIR/include/func.proximity.sh
-
-echo -e "\nJames is syncing time before we start to serve you"
-/usr/bin/env ntpdate-debian >/dev/null 2>&1
+source /opt/james/settings/settings.sh
+source $BASEDIR/include/func.*.sh
 
 echo -e "\nJames Proximity monitor is now starting"
 $ALERT "James proximity monitor active" &
@@ -15,30 +9,34 @@ INPWD=$(pwd)
 PONLINE=0;
 STATE=2
 while /bin/true; do
-    if [[ $(check_pconnection) -eq 1 ]];
+    if [[ "$(check_pconnection)" -eq 1 ]];
     then
 	PONLINE=1
 	echo -e "DEBUG: $(date) $PINGDEVICEMAC online" >> $PDBGLOG
 
 	if [ $STATE -ne "1" ];
 	then
-		cd $BOTDIR
-		ONLINE=$($WHOISONLINE)
-		cd $INPWD
-		$ALERT "Welcome home master. Perimeter defence deactivated." &
-		STATE=1
+            cd $BOTDIR
+            ONLINE=$($WHOISONLINE)
+            cd $INPWD
+            $ALERT "Welcome home master. Perimeter defence deactivated." &
+            echo -e "$(date) master came home"
+            STATE=1
 	fi
 	$BASEDIR/new_event.sh prx_at_home "Sleeping long ($PLONG secs)"
+        echo -e "$(date)\tsleeping for $PLONG seconds"
 
 	sleep $PLONG
 
 	while [[ $PONLINE -eq 1 ]]; do
-	    if [[ $(check_pconnection) -eq 1 ]]; then
+	    if [[ "$(check_pconnection)" -eq 1 ]]; then
 		echo -e "DEBUG: $(date) $PINGDEVICEMAC still online" >> $PDBGLOG
+                echo -e "$(date)\tmaster still home, sleeping for $PLONG seconds"
 		sleep $PLONG
 	    else
 		PONLINE=0
 		echo -e "DEBUG: $(date) $PINGDEVICEMAC not longer online." >> $PDBGLOG
+                echo -e "$(date)\tdevice away, sleeping for $PSHORT seconds"
 		sleep $PSHORT
 	    fi
 	done
@@ -48,15 +46,17 @@ while /bin/true; do
 
 	if [ $STATE -ne "0" ];
 	then
-		cd $BOTDIR
-		ONLINE=$($WHOISONLINE)
-		cd $INPWD
-		$ALERT "You left. Perimeter defence enabled" &
-		STATE=0
+            cd $BOTDIR
+            ONLINE=$($WHOISONLINE)
+            cd $INPWD
+            $ALERT "You left. Perimeter defence enabled" &
+            echo -e "$(date)\tmaster went away! i am now a watchdog"
+
+            STATE=0
 	fi
 	$BASEDIR/new_event.sh prx_went_away "Sleeping short ($PSHORT)"
+        echo -e "$(date)\tsleeping for $PSHORT seconds"
 
 	sleep $PSHORT
     fi
-    
 done
