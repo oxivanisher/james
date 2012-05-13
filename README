@@ -23,7 +23,7 @@ Installation:
 Attention:
     - Theese are very "hacky" scripts. They should run as root but be aware of
       possible security risks!
-    - You should use diffrent users for james (XMPP bot) and the alerting.
+    - You should use different users for james (XMPP bot) and the alerting.
     - You have to install (debian) python-xmpp and screen, espeak, etherwake
     - Optional: mpc
 
