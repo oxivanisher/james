@@ -24,19 +24,20 @@ COMPUTERMAC=""
 NETINTERFACE="eth0"
 # Proximity timeouts
 PLONG=900
-PSHORT=30
+PSHORT=20
 
 ## Email settings
 EMAIL=
 
 ## Internal Paths (you probably won't have to change them)
 BOTDIR="$BASEDIR/bot"
+MOTIONDIR="$TMPDIR/motion/"
 ALERT="$BASEDIR/scripts/alert.sh"
+WHOISONLINE="$BASEDIR/scripts/whoisonline.sh"
 MACVENDORFILE="$BASEDIR/data/oui.txt"
 NEWFILE="$BASEDIR/data/whoisonline.new"
-WHOISONLINE="$BASEDIR/scripts/whoisonline.sh"
-PSTATEFILE="$TMPDIR/prx_state.dat"
+PSTATEFILE="$TMPDIR/james.proximity.state"
 PDBGLOG="$TMPDIR/james.proximity.log"
-BOTFORCERESTART="$TMPDIR/restart_james.tmp"
+BOTFORCERESTART="$TMPDIR/james.jabber.force_restart"
 ALERTLOG="$TMPDIR/james.alert.log"
-MOTIONDIR="$TMPDIR/motion/"
+ALERTMESSAGES="$TMPDIR/james.alert.messages"

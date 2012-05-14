@@ -53,10 +53,10 @@ function check_files {
 function start_daemon {
     if [ -f "$BASEDIR/daemon.$1.sh" ];
     then
-        if [ "$(/usr/bin/env screen -ls | grep james-$1-daemon)a" == "a" ];
+        if [ "$($(which screen) -ls | grep james-$1-daemon)a" == "a" ];
         then
             echo -e -n "$1 ";
-            /usr/bin/env screen -dmS james-$1-daemon $BASEDIR/daemon.$1.sh
+            $(which screen) -dmS james-$1-daemon $BASEDIR/daemon.$1.sh
         fi
     fi
 }
@@ -67,5 +67,19 @@ function wait_for_lock {
 }
 
 function alert {
-    $ALERT $@
+    if [ -n "$1" ];
+    then
+        LOOP=1
+        while [ $LOOP -eq 1 ];
+        do
+            if [ -f "$ALERTMESSAGES.lock" ];
+            then
+                sleep 1
+                LOOP=1
+            else
+                echo "\"$1\" \"$2\"" >> $ALERTMESSAGES
+                LOOP=0
+            fi
+        done
+    fi
 }

@@ -17,5 +17,5 @@ function get_mac_vendor {
 }
 
 function nmap_scan {
-    /usr/bin/env nmap  -O $1
+    $(which nmap)  -O $1
 }

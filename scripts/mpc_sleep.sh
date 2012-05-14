@@ -1,6 +1,6 @@
 #!/bin/bash
 
-mpc volume 70
-mpc play
+$(which mpc) volume 70
+$(which mpc) play
 sleep 600
-mpfade 30 0
+$(which mpfade) 30 0

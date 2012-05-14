@@ -6,31 +6,24 @@ if [ -f $PSTATEFILE ];
 then
     PSTATE=$(cat $PSTATEFILE)
 else
-    touch $PSTATEFILE
+    echo 0 > $PSTATEFILE
 fi
 
+echo -e "event($1) $2 $(date +%H:%M:%S)" >> $MAINLOG
 case "$1" in
-
-
     ## System events
     sys_reboot)
         alert "$(hostname) is rebooting"
-        echo -e "event(sys_reboot) by $(whoami) $(date +%H:%M:%S) $2" >> $MAINLOG
         reboot &
     ;;
 
     sys_poweroff)
         alert "$(hostname) is powering down"
-        echo -e "event(sys_poweroff) by $(whoami) $(date +%H:%M:%S) $2" >> $MAINLOG
         poweroff &
     ;;
 
-    sys_startup)
-        echo -e "event(sys_startup) $2 $(date +%H:%M:%S)" >> $MAINLOG
-        /usr/bin/env ntpdate-debian >/dev/null 2>&1
-    start)
+    sys_startup|start)
         echo -e "James: Your Buttler startup"
-
         echo -e -n "\tChecking for needed files: "
         check_files || exit 1
         echo -e "> done"
@@ -64,7 +57,7 @@ case "$1" in
             JAMESCHECK=$(ps -ef | grep "python ./james.py" | grep -v grep | awk '{ print $2 }')
             if [ "a" != "a$JAMESCHECK" ];
             then
-                alert "Restarting Sir James forced"
+                alert "Forced restarting Sir James"
                 kill $JAMESCHECK
             fi
             rm $BOTFORCERESTART
@@ -75,7 +68,6 @@ case "$1" in
     ##Cam events
     cam_dc)
         alert "Cam disconnected"
-        echo -e "event(cam_dc) $2 $(date +%H:%M:%S)" >> $MAINLOG
     ;;
 
     cam_mov)
@@ -84,7 +76,6 @@ case "$1" in
             rm $2
         else
             alert "Movement detected" &
-            echo -e "event(cam_mov) $2 $(date +%H:%M:%S)" >> $MAINLOG
         fi
         transfer_file $2 &
     ;;
@@ -95,7 +86,7 @@ case "$1" in
             rm $2
         else
 #           uuencode ${2} $(basename ${2}) | mail -s "Cam image event detected $(date +%H:%M:%S)" $EMAIL &
-            echo -e "event(cam_img) $2 $(date +%H:%M:%S)" >> $MAINLOG
+            true
         fi
         transfer_file $2 &
     ;;
@@ -103,16 +94,13 @@ case "$1" in
 
     ## Proximity events
     prx_at_home)
-        echo 1 > $PSTATEFILE
         /etc/init.d/motion stop >/dev/null 2>&1
-        /usr/bin/env etherwake -i $NETINTERFACE $COMPUTERMAC
-        echo -e "event(prx_at_home) $2 $(date +%H:%M:%S)" >> $MAINLOG
+        /usr/sbin/etherwake -i "$NETINTERFACE" "$COMPUTERMAC"
     ;;
 
     prx_went_away)
-        echo 0 > $PSTATEFILE
         /etc/init.d/motion start >/dev/null 2>&1
-        echo -e "event(prx_went_away) $2 $(date +%H:%M:%S)" >> $MAINLOG
+        $(which mpc) stop
     ;;
 
 
@@ -129,11 +117,11 @@ case "$1" in
     ;;
 
     arp_scan)
-        /usr/bin/env arp-scan -I $NETINTERFACE -q --localnet | sort -t . -k 1,1n -k 2,2n -k 3,3n -k 4,4n
+        $(which arp-scan) -I $NETINTERFACE -q --localnet | sort -t . -k 1,1n -k 2,2n -k 3,3n -k 4,4n
     ;;
 
     alert)
-        alert $@
+        alert "$2" "$3"
     ;;
 
     ## Default event
