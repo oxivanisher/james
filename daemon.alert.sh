@@ -2,8 +2,6 @@
 source /opt/james/settings/settings.sh
 source $BASEDIR/include/func.*.sh
 
-#$ALERTMESSAGES
-
 $ALERT "Alert daemon started"
 
 while true;
