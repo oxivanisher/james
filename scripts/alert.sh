@@ -9,7 +9,7 @@ if [ "a$2" != "a" ];
 then
     MSG="$1\n$2"
 fi
-echo -e "$MSG" | $(which sendxmpp) -r Alert -u $XMPPUSER -p $XMPPPASS -j $XMPPDOMAIN $XMPPTARGET >/dev/null 2>&1 &
+echo -e "$MSG" | $(which sendxmpp) -r Alert -u $XMPPUSER -p $XMPPPASS -j $XMPPDOMAIN $XMPPTARGET >/dev/null #2>&1 &
 
 if [ $(cat $PSTATEFILE) -eq 1 ];
 then
