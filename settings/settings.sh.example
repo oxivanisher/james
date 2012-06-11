@@ -29,6 +29,12 @@ PSHORT=20
 ## Email settings
 EMAIL=
 
+## Transmission Download settings
+TRHOST=""
+TRPORT=9091
+TRUSER=""
+TRPASS=""
+
 ## Internal Paths (you probably won't have to change them)
 BOTDIR="$BASEDIR/bot"
 MOTIONDIR="$TMPDIR/motion/"

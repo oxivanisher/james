@@ -115,6 +115,14 @@ class JamesBot(JabberBot):
 			return 'Currently online ips:\n' + who
 
 		@botcmd
+		def dl(self, mess, args):
+			"""Download magnet or torrent from URL"""
+			dl_pipe = os.popen('../scripts/send2transmission.sh ' + args, 'r')
+			dl = dl_pipe.read().strip()
+			dl_pipe.close()
+			return 'URL submitted. Result: ' + dl
+
+		@botcmd
 		def at(self, mess, args):
 			"""Notify on given time"""
 			at_pipe = os.popen('../scripts/at.sh ' + args, 'r')
