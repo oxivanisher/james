@@ -1,6 +1,7 @@
 #!/bin/bash
 source /opt/james/settings/settings.sh
 
+# based on http://blog.flo.cx/2011/02/how-to-open-magnet-links-on-a-remote-transmission-daemon-with-one-click/
 test -z $1 && echo "need torrent/magnet link!" && exit -1
  
 LINK="$@"
