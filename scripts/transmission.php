@@ -1,12 +1,7 @@
 #!/usr/bin/php
 <?php
 
-$GLOBALS['truser'] = "admin";
-$GLOBALS['trpass'] = "kickass";
-$GLOBALS['trhost'] = "xbmc.thunderbluff.ch";
-$GLOBALS['trport'] = 9091;
-$GLOBALS['trurl']  = "/transmission/rpc";
-$GLOBALS['trsid']  = null;
+require_once("../settings/settings.php");
 
 # helper functions
 function formatBytes($bytes, $precision = 2) { 
@@ -127,6 +122,7 @@ switch ($argv[1]) {
 	case "stats":
 		$data = query ("session-stats");
 		print_r($data);
+		
 	break;
 
 	case "add":
@@ -138,6 +134,8 @@ switch ($argv[1]) {
 		}
 	break;
 
+	default:
+		echo "Please specify: list, add, start, stop, stats, remove. (Showing list)\n";
 	case "list":
 		$return = query ("torrent-get",array("fields" => (array("name", "id", "error", "errorString", "leftUntilDone", "percentDone", "status", "totalSize", "uploadRatio"))));
 		foreach ($return as $torrents) {
@@ -154,10 +152,8 @@ switch ($argv[1]) {
 		echo " P:" . (string) $data->pausedTorrentCount;
 		echo " T:" . (string) $data->torrentCount . " | ";
 		echo "Down: " . formatBytes((string) $data->downloadSpeed) . "/s; Up: " . formatBytes((string) $data->uploadSpeed) . "/s\n";
+		
 	break;
-
-	default:
-		echo "Please specify: list, add, start, stop, stats, remove\n";
 }
 
 ?>
