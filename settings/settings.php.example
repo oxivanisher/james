@@ -1,0 +1,12 @@
+<?php
+# Settings for PHP scripts
+
+# Transmission Settings
+$GLOBALS['truser'] = "";
+$GLOBALS['trpass'] = "";
+$GLOBALS['trhost'] = "";
+$GLOBALS['trport'] = 9091;
+$GLOBALS['trurl']  = "/transmission/rpc";
+
+
+?>

@@ -1,5 +1,6 @@
 settings/james.cfg
 settings/settings.sh
+settings/settings.php
 data/whoisonline.csv
 data/whoisonline.new
 nbproject/*
