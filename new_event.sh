@@ -124,6 +124,14 @@ case "$1" in
         alert "$2" "$3"
     ;;
 
+
+	## XBMC events
+	xbmc_update)
+		$BASEDIR/scripts/xbmc.php update > /dev/null &
+		alert "XBMC video database is updating."
+	;;
+
+
     ## Default event
     *)
         echo "error, please specify a event"

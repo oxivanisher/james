@@ -1,5 +1,8 @@
 <?php
 # Settings for PHP scripts
+$GLOBALS['basedir'] = "/opt/james/";
+date_default_timezone_set('Europe/Zurich');
+
 
 # Transmission Settings
 $GLOBALS['truser'] = "";
@@ -8,5 +11,13 @@ $GLOBALS['trhost'] = "";
 $GLOBALS['trport'] = 9091;
 $GLOBALS['trurl']  = "/transmission/rpc";
 
+# You probaby won't have to change theese
+$GLOBALS['newEvent'] = $GLOBALS['basedir'] . "/new_event.sh";
 
+
+# please leave this alone!
+function alert($message) {
+	exec($GLOBALS['newEvent'] . " alert \"". $message ."\"");
+	return $message;
+}
 ?>

@@ -13,7 +13,7 @@ echo -e "$MSG" | $(which sendxmpp) -r Alert -u $XMPPUSER -p $XMPPPASS -j $XMPPDO
 
 if [ $(cat $PSTATEFILE) -eq 1 ];
 then
-    $(which espeak) "$1" >/dev/null 2>&1
+    $(which espeak) -v en-rp -ven+m7  "$1" >/dev/null 2>&1
 fi
 
 echo -e "$(date +%H:%M:%S):\n$1\n\n" >>$ALERTLOG

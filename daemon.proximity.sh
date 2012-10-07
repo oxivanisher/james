@@ -2,8 +2,9 @@
 source /opt/james/settings/settings.sh
 source $BASEDIR/include/func.*.sh
 
-echo -e "\nJames Proximity monitor is now starting"
-alert "James proximity monitor active" &
+echo -e "\nJames monitor is now starting"
+$BASEDIR/new_event.sh prx_went_away "Sleeping short ($PSHORT)"
+alert "James monitor active" &
 
 PONLINE=0;
 STATE=2
@@ -18,14 +19,14 @@ while /bin/true; do
             cd $BOTDIR
             ONLINE=$($WHOISONLINE)
             cd $INPWD
-            alert "Welcome home master. Perimeter defence deactivated." &
+            alert "Welcome home. Perimeter surveillance is now deactivated." &
             echo -e "$(date) master came home"
             STATE=1
 	fi
 
-        echo 1 > $PSTATEFILE
+    echo 1 > $PSTATEFILE
 	$BASEDIR/new_event.sh prx_at_home "Sleeping long ($PLONG secs)"
-        echo -e "$(date)\tsleeping for $PLONG seconds"
+    echo -e "$(date)\tsleeping for $PLONG seconds"
 
 	sleep $PLONG
 
@@ -50,15 +51,15 @@ while /bin/true; do
             cd $BOTDIR
             ONLINE=$($WHOISONLINE)
             cd $INPWD
-            alert "You left. Perimeter defence enabled" &
+            alert "You left. Perimeter surveillance enabled." &
             echo -e "$(date)\tmaster went away! i am now a watchdog"
 
             STATE=0
 	fi
 
-        echo 0 > $PSTATEFILE
+    echo 0 > $PSTATEFILE
 	$BASEDIR/new_event.sh prx_went_away "Sleeping short ($PSHORT)"
-        echo -e "$(date)\tsleeping for $PSHORT seconds"
+    echo -e "$(date)\tsleeping for $PSHORT seconds"
 
 	sleep $PSHORT
     fi

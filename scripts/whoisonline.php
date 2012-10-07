@@ -1,14 +1,11 @@
 <?php
 
+require_once("../settings/settings.php");
+
 #Who is online
 #Settings
-$rootdir = "/opt/james/";
 
-$new_event = $rootdir . "new_event.sh";
-$dbfile = $rootdir . "data/whoisonline.csv";
-
-date_default_timezone_set('Europe/Zurich');
-
+$dbfile = $GLOBALS['basedir'] . "data/whoisonline.csv";
 
 #Helper functions
 
@@ -49,7 +46,7 @@ foreach (load_csv($dbfile) as $entry) {
 
 # scan for devices
 $onlinemacs = null;
-exec($new_event . " arp_scan", $onlinemacs);
+exec($GLOBALS['newEvent'] . " arp_scan", $onlinemacs);
 foreach ($onlinemacs as $onlinemacsLine) {
     $out = split("	", $onlinemacsLine);
     if (count($out) > 1) {
@@ -65,7 +62,7 @@ foreach ($onlinemacs as $onlinemacsLine) {
                 save_csv($dbfile, "\n" . $db[$tmpmac][0] . ";" . $tmpmac . ";" . $db[$tmpmac][1] . ";" . $db[$tmpmac][2] . ";" . $db[$tmpmac][3]);
 
                 # notify about and scan that thing
-                exec($new_event . " alert \"unknown host detected!\" " . $db[$tmpmac][4] . " (" . $tmpmac . ")");
+                exec($GLOBALS['newEvent'] . " alert \"unknown host detected!\" " . $db[$tmpmac][4] . " (" . $tmpmac . ")");
             } else {
                 # this already known device is online
                 $db[$tmpmac][4] = $out[0]; #online/ip

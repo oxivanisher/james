@@ -123,6 +123,14 @@ class JamesBot(JabberBot):
 			return tr
 
 		@botcmd
+		def xb(self, mess, args):
+			"""Manage XBMC"""
+			xb_pipe = os.popen('../scripts/xbmc.php ' + args, 'r')
+			xb = xb_pipe.read().strip()
+			xb_pipe.close()
+			return xb
+
+		@botcmd
 		def at(self, mess, args):
 			"""Notify on given time"""
 			at_pipe = os.popen('../scripts/at.sh ' + args, 'r')

@@ -18,6 +18,21 @@ function formatBytes($bytes, $precision = 2) {
     return round($bytes, $precision) . ' ' . $units[$pow]; 
 }
 
+function returnStatus ($status) {
+	switch ($status) {
+		case 0:
+			return "Stopped";
+		break;
+
+		case 4:
+			return "Downloading";
+		break;
+
+		default:
+			return "Unknown";
+	}
+}
+
 # system functions
 function checkSession () {
 	if (empty ($GLOBALS['trsid'])) {
@@ -85,21 +100,33 @@ if (empty($argv[1])) $argv[1] = null;
 switch ($argv[1]) {
 	case "stop":
 		if (isset($argv[2])) {
-			$data = query("torrent-stop", array("ids" => $argv[2]));
-			echo "Success!\n";
+			if (empty($ids)) {
+				$data = query("torrent-stop");
+			} elseif (count($ids) == 1) {
+				$data = query("torrent-stop", array("ids" => (int) $argv[2]));
+			} else {
+				$data = query("torrent-stop", array("ids" => array($ids)));
+			}
+			echo "Torrent " . $argv[2] . " stopped.";
 		} else {
 			$data = query("torrent-stop");
-			die("Success on all Torrents!\n");
+			echo "Stopped all Torrents.";
 		}
 	break;
 
 	case "start":
 		if (isset($argv[2])) {
-			$data = query("torrent-start", array("ids" => $argv[2]));
-			echo "Success!\n";
+			if (empty($ids)) {
+				$data = query("torrent-start");
+			} elseif (count($ids) == 1) {
+				$data = query("torrent-start", array("ids" => (int) $argv[2]));
+			} else {
+				$data = query("torrent-start", array("ids" => array($ids)));
+			}
+			echo "Torrent " . $argv[2] . " started.";
 		} else {
 			$data = query("torrent-start");
-			die("Success on all Torrents!\n");
+			echo "Started all Torrents.";
 		}
 	break;
 
@@ -113,24 +140,23 @@ switch ($argv[1]) {
 			} else {
 				$data = query("torrent-remove", array("ids" => array($ids)));
 			}
-			echo "Success!\n";
+			echo "Torrent " . $argv[2] . " removed.";
 		} else {
-			die("Please add id(s)!\n");
+			echo "Please add id(s) for removal!";
 		}
 	break;
 
 	case "stats":
 		$data = query ("session-stats");
 		print_r($data);
-		
 	break;
 
 	case "add":
 		if (isset($argv[2])) {
 			$data = query("torrent-add", array("filename" => $argv[2]));
-			echo "Success!\n";
+			echo "Torrent started!";
 		} else {
-			die("Please add a URL or MAGNET link.\n");
+			echo "Please add a URL or MAGNET link.";
 		}
 	break;
 
@@ -140,10 +166,10 @@ switch ($argv[1]) {
 		$return = query ("torrent-get",array("fields" => (array("name", "id", "error", "errorString", "leftUntilDone", "percentDone", "status", "totalSize", "uploadRatio"))));
 		foreach ($return as $torrents) {
 			foreach ($torrents as $torrent) {
-				echo (string) $torrent->id . " " . ((string) $torrent->percentDone * 100)  . "% " . (string) $torrent->name . "\n";
+				echo (string) $torrent->id . " " . ((string) $torrent->percentDone * 100)  . "% " . returnStatus((string) $torrent->status) . " | " . (string) $torrent->name;
+				echo " | " . formatBytes((string) $torrent->leftUntilDone) . " of " . formatBytes((string) $torrent->totalSize) . " left";
+				echo " | Ul Ratio: " . ((string) $torrent->uploadRatio * 100) . "%\n";
 				if ($torrent->error > 0) echo " ERROR: " . (string) $torrent->errorString . "\n";
-				echo "  " . formatBytes((string) $torrent->leftUntilDone) . " of " . formatBytes((string) $torrent->totalSize) . " left";
-				echo "; Status: " . (string) $torrent->status . "; Ul: " . ((string) $torrent->uploadRatio * 100) . "%\n";
 			}
 		}
 		
@@ -152,7 +178,6 @@ switch ($argv[1]) {
 		echo " P:" . (string) $data->pausedTorrentCount;
 		echo " T:" . (string) $data->torrentCount . " | ";
 		echo "Down: " . formatBytes((string) $data->downloadSpeed) . "/s; Up: " . formatBytes((string) $data->uploadSpeed) . "/s\n";
-		
 	break;
 }
 
