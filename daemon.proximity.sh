@@ -14,6 +14,7 @@ while /bin/true; do
 	PONLINE=1
 	echo -e "DEBUG: $(date) $PINGDEVICEMAC online" >> $PDBGLOG
 
+	READLOG=0
 	if [ $STATE -ne "1" ];
 	then
             cd $BOTDIR
@@ -21,12 +22,31 @@ while /bin/true; do
             cd $INPWD
             alert "Welcome home. Perimeter surveillance is now deactivated." &
             echo -e "$(date) master came home"
+
+			if [ -f $ALERTCACHE ];
+			then
+				READLOG=1
+			fi
+
             STATE=1
 	fi
 
     echo 1 > $PSTATEFILE
 	$BASEDIR/new_event.sh prx_at_home "Sleeping long ($PLONG secs)"
     echo -e "$(date)\tsleeping for $PLONG seconds"
+
+	if [ $READLOG == 1 ];
+	then
+		LOGDATA=$(cat $ALERTCACHE)
+		rm $ALERTCACHE
+
+		alert "While you where gone, the following things happend:"
+		echo -e "$LOGDATA" | while read LOGLINE;
+		do
+			alert "$LOGLINE"
+		done
+		alert "End of Log."
+	fi
 
 	sleep $PLONG
 

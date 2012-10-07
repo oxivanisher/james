@@ -3,4 +3,5 @@ settings/settings.sh
 settings/settings.php
 data/whoisonline.csv
 data/whoisonline.new
+data/alert.cache
 nbproject/*
