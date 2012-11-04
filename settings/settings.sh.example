@@ -5,10 +5,10 @@ BASEDIR="/opt/james/"
 TMPDIR="/tmp"
 
 #please don't use FQDN
-ALERTHOST="localhost"
-RASPHOST="localhost"
-PROXIMITYHOST="localhost"
-XBMCHOST="localhost"
+ALERTNODE="localhost"
+RASPNODE="localhost"
+PROXIMITYNODE="localhost"
+JABBERNODE="localhost"
 
 ## Alert Settings (XMPP)
 XMPPUSER="alert"

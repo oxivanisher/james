@@ -38,6 +38,7 @@ case "$1" in
         start_daemon jabber
         start_daemon alert
         start_daemon proximity
+		start_daemon rasp
         echo -e "> done"
 
         echo -e "\t=> Everything is running now\n"
@@ -50,6 +51,7 @@ case "$1" in
         start_daemon jabber >/dev/null 2>&1
         start_daemon alert >/dev/null 2>&1
         start_daemon proximity >/dev/null 2>&1
+		start_daemon rasp >/dev/null 2>&1
 
         if [ -f $BOTFORCERESTART ];
         then
@@ -131,8 +133,7 @@ case "$1" in
 	;;
 
     alert)
-		HOST=$(detect_host "alert")
-		if [ $HOST == "localhost" ];
+		if [ $(detect_host "alert") == "localhost" ];
 		then
 			echo "processing alert event on $(host $(hostname) | awk '{ print $1 }')" >&2
 	        alert "$2" "$3"
@@ -151,8 +152,7 @@ case "$1" in
 
 	## Raspbery Pi events
 	rasp)
-		HOST=$(detect_host "rasp")
-		if [ $HOST == "localhost" ];
+		if [ $(detect_host "rasp") == "localhost" ];
 		then
 			echo "processing rasp event on $(host $(hostname) | awk '{ print $1 }')" >&2
 			$BASEDIR/scripts/rasp.php "$2" "$3" "$4" "$5"

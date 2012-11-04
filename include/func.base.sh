@@ -59,13 +59,16 @@ function check_files {
 }
 
 function start_daemon {
-    if [ -f "$BASEDIR/daemon.$1.sh" ];
+	if [ $(detect_host "$1") == "localhost" ];
     then
-        if [ "$($(which screen) -ls | grep james-$1-daemon)a" == "a" ];
-        then
-            echo -e -n "$1 ";
-            $(which screen) -dmS james-$1-daemon $BASEDIR/daemon.$1.sh
-        fi
+		if [ -f "$BASEDIR/daemon.$1.sh" ];
+	    then
+	        if [ "$($(which screen) -ls | grep james-$1-daemon)a" == "a" ];
+	        then
+	            echo -e -n "$1 ";
+	            $(which screen) -dmS james-$1-daemon $BASEDIR/daemon.$1.sh
+			fi
+	    fi
     fi
 }
 
@@ -114,22 +117,23 @@ function detect_host {
 #	echo myip: $MYIP
 #	echo alerthost: $ALERTHOST
 #	MYIP=$(ifconfig  | grep 'inet addr:'| grep -v '127.0.0.1' | cut -d: -f2 | awk '{ print $1}')
+	TMPHOST="not_set"
 	case "$1" in
 		"alert")
-			RESULT=$(check_host_ips "$ALERTHOST")
-			TMPHOST=$ALERTHOST
+			RESULT=$(check_host_ips "$ALERTNODE")
+			TMPHOST=$ALERTNODE
 		;;
 		"rasp")
-			RESULT=$(check_host_ips "$RASPHOST")
-			TMPHOST=$RASPHOST
+			RESULT=$(check_host_ips "$RASPNODE")
+			TMPHOST=$RASPNODE
 		;;
 		"proximity")
-			RESULT=$(check_host_ips "$PROXIMITYHOST")
-			TMPHOST=$PROXIMITYHOST
+			RESULT=$(check_host_ips "$PROXIMITYNODE")
+			TMPHOST=$PROXIMITYNODE
 		;;
-		"xmpp")
-			RESULT=$(check_host_ips "$XMPPHOST")
-			TMPHOST=$XMPPHOST
+		"jabber")
+			RESULT=$(check_host_ips "$JABBERNODE")
+			TMPHOST=$JABBERNODE
 		;;
 		*)
 			echo -1
