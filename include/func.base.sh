@@ -55,6 +55,7 @@ function check_files {
 	chown root $BASEDIR/new_event.sh
 	chmod 755 $BASEDIR/new_event.sh
 	chmod +s $BASEDIR/new_event.sh
+	echo "" > $PSTATEFILE
 }
 
 function start_daemon {
