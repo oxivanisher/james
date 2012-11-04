@@ -43,7 +43,7 @@ TRPASS=""
 ## Internal Paths (you probably won't have to change them)
 BOTDIR="$BASEDIR/bot"
 MOTIONDIR="$TMPDIR/motion/"
-ALERT="$BASEDIR/scripts/alert.sh"
+ALERT="$BASEDIR/new_event.sh alert "
 WHOISONLINE="$BASEDIR/scripts/whoisonline.sh"
 MACVENDORFILE="$BASEDIR/data/oui.txt"
 NEWFILE="$BASEDIR/data/whoisonline.new"

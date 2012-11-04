@@ -59,7 +59,9 @@ function check_files {
 }
 
 function start_daemon {
-	if [ $(detect_host "$1") == "localhost" ];
+	TARGETHOST=$(detect_host $1)
+	echo "checking for $1 in $(detect_host $1)"
+	if [ "$TARGETHOST" == "localhost" ];
     then
 		if [ -f "$BASEDIR/daemon.$1.sh" ];
 	    then
