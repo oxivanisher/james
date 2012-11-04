@@ -124,7 +124,15 @@ case "$1" in
 	;;
 
     alert)
-        alert "$2" "$3"
+		HOST=$(detect_host "alert")
+		if [ "$HOST" == "localhost" ];
+		then
+	        alert "$2" "$3"
+		else
+			echo "forwarding alert to $HOST"
+			ssh root@$HOST /opt/james/new_event.sh alert "$2" "$3"
+		fi
+
     ;;
 
 

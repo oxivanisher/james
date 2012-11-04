@@ -5,6 +5,8 @@ BASEDIR="/opt/james/"
 TMPDIR="/tmp"
 
 ## Alert Settings (XMPP)
+ALERTHOST="localhost"
+RASPHOST="localhost"
 XMPPUSER="alert"
 XMPPDOMAIN=""
 XMPPPASS=""

@@ -88,3 +88,21 @@ function alert {
         done
     fi
 }
+
+function detect_host {
+	MYIP=$(ifconfig  | grep 'inet addr:'| grep -v '127.0.0.1' | cut -d: -f2 | awk '{ print $1}')
+	case "$1" in
+		"alert")
+			if [ "a$MYIP" == "a$ALERTHOST" ];
+			then
+				echo "localhost"
+			else
+				echo "$ALERTHOST"
+			fi
+		;;
+		*)
+			echo "error_module_not_found"
+		;;
+	esac
+
+}
