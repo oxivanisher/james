@@ -77,14 +77,16 @@ function sleepLoop() {
 		}
 	}
 
-	$maxBlinkCount = round(($GLOBALS['POWERLEDBLINKINT'] * 1000000) / ($GLOBALS['POWERLEDBLINKNUM'] * 100000 * 2));
+	$maxBlinkCount = round(($GLOBALS['POWERLEDBLINKINT'] * 1000000) / ($GLOBALS['POWERLEDBLINKNUM'] * 100000 * 2), 0, PHP_ROUND_HALF_DOWN);
 	$tmpUsleep = $GLOBALS['LOOPUSLEEP'];
+
 	if ($GLOBALS['POWERLEDBLINKNUM'] > $maxBlinkCount) {
-		echo "max blinks in sleep loop reached (" . $maxBlinkCount . ")\n";
+	#	echo "max blinks while sleep loop reached (" . $GLOBALS['POWERLEDBLINKNUM'] . "/" . $maxBlinkCount . ")\n";
 		$GLOBALS['POWERLEDBLINKNUM'] = $maxBlinkCount;
 	}
 	if ($GLOBALS['powerBlinkCount'] >= ($GLOBALS['POWERLEDBLINKINT'] * round(1000000 / $GLOBALS['LOOPUSLEEP']))) {
 		$GLOBALS['powerBlinkCount'] = 0;
+	#	echo "blinking " . $GLOBALS['POWERLEDBLINKNUM'] . "/" . $maxBlinkCount . " times\n";
 		blink(0, $GLOBALS['POWERLEDBLINKNUM'], 100000);
 		$tmpUsleep = $tmpUsleep - ($GLOBALS['POWERLEDBLINKNUM'] * 2 * 100000);
 	}
