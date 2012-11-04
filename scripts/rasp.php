@@ -1,16 +1,16 @@
 <?php
 ini_set("enable_dl","On");
-include('../include/wiringpi.php');
-include('../settings/settings.php');
-include('../include/func.base.php');
-include('../include/func.rasp.php');
+include('/opt/james/include/wiringpi.php');
+include('/opt/james/settings/settings.php');
+include('/opt/james/include/func.base.php');
+include('/opt/james/include/func.rasp.php');
 
 #init
-initLoop();
+#initLoop();
+echo "test ok";
 switchOn(0);
-$ATHOMECHECKLOOPS = 10000;
-$atHomeCheckLoop = 0;
 
+/*
 #main loop
 echo "looping...\n";
 $run = true;
@@ -36,5 +36,5 @@ while ($run) {
 
 	$run = sleepLoop();
 }
-
+*/
 ?>

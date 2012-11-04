@@ -150,6 +150,14 @@ case "$1" in
 	;;
 
 
+	## Raspbery Pi events
+	rasp)
+		$BASEDIR/scripts/rasp.php $2 $3 $4 $5
+		#alert "XBMC video database is updating."
+	;;
+
+
+
     ## Default event
     *)
         echo "unknown event: <$1>, please specify one"
