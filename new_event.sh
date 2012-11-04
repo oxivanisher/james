@@ -130,6 +130,7 @@ case "$1" in
 			echo "alerting on $(hostname)"
 	        alert "$2" "$3"
 		else
+			echo "forwarding to ssh root@$HOST"
 			ssh root@$HOST /opt/james/new_event.sh alert "$2" "$3"
 		fi
 

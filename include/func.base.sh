@@ -136,7 +136,7 @@ function detect_host {
 	then
 		echo "localhost"
 	else
-		echo "$TMPHOST"
+		echo "$(host $TMPHOST | awk '{ print $1 }')"
 	fi
 
 }
