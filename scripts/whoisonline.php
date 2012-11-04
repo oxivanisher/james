@@ -49,7 +49,8 @@ foreach (load_csv($dbfile) as $entry) {
 
 # scan for devices
 $onlinemacs = null;
-$onlinemacs = newEvent("arp_scan");
+$onlinemacsStr = newEvent("arp_scan");
+$onlinemacs = explode("\n", $onlinemacsStr);
 foreach ($onlinemacs as $onlinemacsLine) {
     $out = split("	", $onlinemacsLine);
     if (count($out) > 1) {
