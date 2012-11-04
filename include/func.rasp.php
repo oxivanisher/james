@@ -85,7 +85,7 @@ function quitLoop($leds = array(), $buttons = array()) {
 }
 
 #james specific functions
-function alert($message) {
+function jamesAlert($message) {
 	$message = str_replace(" ", "\ ", $message);
 	system('ssh root@xbmc.thunderbluff.ch /opt/james/new_event.sh alert \'' . $message . '\'');
 }

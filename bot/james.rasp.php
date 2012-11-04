@@ -1,11 +1,11 @@
 <?php
 ini_set("enable_dl","On");
 include('../include/wiringpi.php');
-include('../settings/settings.inc.php');
-include('../include/functions.inc.php');
+include('../settings/settings.php');
+include('../include/func.rasp.php');
 
 #init
-alert("RaspJames starting up.");
+jamesAlert("RaspJames starting up.");
 initLoop();
 switchOn(0);
 
@@ -17,7 +17,7 @@ while ($run) {
 	for ($i=4; $i < 8; $i++) {
 		if (buttonCheck($i)) {
 			echo "here we go for button " . $i . "\n";
-			alert("Button " . $i . " pressed.");
+			jamesAlert("Button " . $i . " pressed.");
 		}
 	}
 
