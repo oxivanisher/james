@@ -133,7 +133,7 @@ class JamesBot(JabberBot):
 		@botcmd
 		def rasp(self, mess, args):
 			"""Manage RaspberryPi"""
-			ras_pipe = os.popen('../scripts/rasp.php ' + args, 'r')
+			ras_pipe = os.popen('../new_event.sh rasp ' + args, 'r')
 			ras = ras_pipe.read().strip()
 			ras_pipe.close()
 			return ras
