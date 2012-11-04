@@ -3,7 +3,6 @@
 ## Base Settings
 BASEDIR="/opt/james/"
 TMPDIR="/tmp"
-MAINLOG="/var/log/james.log"
 
 ## Alert Settings (XMPP)
 XMPPUSER="alert"

@@ -5,7 +5,8 @@ source $BASEDIR/include/func.proximity.sh
 function check_files {
     ERROR=""
     CFGFILES="settings/james.cfg\
-        settings/settings.sh"
+        settings/settings.sh\
+		settings/settings.php"
 
     EXTFILES="ntpdate-debian\
         python\
@@ -48,6 +49,10 @@ function check_files {
         echo -e "$ERROR not found!"
         return 1
     fi
+
+	chown root $BASEDIR/new_event.sh
+	chmod 755 $BASEDIR/new_event.sh
+	chmod +s $BASEDIR/new_event.sh
 }
 
 function start_daemon {

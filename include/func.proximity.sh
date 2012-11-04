@@ -37,3 +37,7 @@ function transfer_file {
         export RSYNC_PASSWORD=""
     fi
 }
+
+function is_at_home {
+	cat $PSTATEFILE
+}

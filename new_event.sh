@@ -9,7 +9,6 @@ else
     echo 0 > $PSTATEFILE
 fi
 
-echo -e "event($1) $2 $(date +%H:%M:%S)" >> $MAINLOG
 case "$1" in
     ## System events
     sys_reboot)
@@ -119,6 +118,10 @@ case "$1" in
     arp_scan)
         $(which arp-scan) -I $NETINTERFACE -q --localnet | sort -t . -k 1,1n -k 2,2n -k 3,3n -k 4,4n
     ;;
+
+	is_at_home)
+		is_at_home
+	;;
 
     alert)
         alert "$2" "$3"

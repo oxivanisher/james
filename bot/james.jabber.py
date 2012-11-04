@@ -196,7 +196,7 @@ class JamesBot(JabberBot):
 		#	old_status = []
 		#return
 
-		mpc_pipe = os.popen('tail -n 1 /var/log/james.log','r')
+		mpc_pipe = os.popen('tail -n 1 /tmp/james.log','r')
 		mpc = mpc_pipe.read().strip()
 		new_status.append(mpc)
 		new_status = mpc.join('\n')
