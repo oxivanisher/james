@@ -20,7 +20,9 @@ function check_files {
         espeak\
         php\
         motion\
-        screen"
+        screen\
+		host\
+		ip"
 
     for FILE in $EXTFILES;
     do
@@ -89,20 +91,52 @@ function alert {
     fi
 }
 
+function check_host_ips {
+	IPLIST=$(host $1 | awk '{ print $4 }')
+	MYIP=$(ip addr show | grep inet | grep -v "127.0.0.1/8" | awk '{ print $2}' | grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}')
+
+	TMPBOOL=0
+	echo $IPLIST | while read IP;
+	do
+		if [ "$(echo $IP | grep $MYIP)" != "" ];
+		then
+			TMPBOOL=1
+		fi
+	done
+
+	#1 means localhost
+	if [ $TMPBOOL > 0 ];
+	then
+		echo 1
+	else
+		echo 0
+	fi
+}
+
 function detect_host {
-	MYIP=$(ifconfig  | grep 'inet addr:'| grep -v '127.0.0.1' | cut -d: -f2 | awk '{ print $1}')
+#	echo myip: $MYIP
+#	echo alerthost: $ALERTHOST
+#	MYIP=$(ifconfig  | grep 'inet addr:'| grep -v '127.0.0.1' | cut -d: -f2 | awk '{ print $1}')
 	case "$1" in
 		"alert")
-			if [ "a$MYIP" == "a$ALERTHOST" ];
-			then
-				echo "localhost"
-			else
-				echo "$ALERTHOST"
-			fi
+			RESULT=$(check_host_ips "$ALERTHOST")
+			TMPHOST=$ALERTHOST
+		;;
+		"rasp")
+			RESULT=$(check_host_ips "$RASPHOST")
+			TMPHOST=$RASP
 		;;
 		*)
-			echo "error_module_not_found"
+			echo -1
 		;;
 	esac
+
+#	echo "result: $RESULT --"
+	if [ $RESULT == 1 ];
+	then
+		echo "localhost"
+	else
+		echo "$TMPHOST"
+	fi
 
 }

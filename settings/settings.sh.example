@@ -4,9 +4,11 @@
 BASEDIR="/opt/james/"
 TMPDIR="/tmp"
 
-## Alert Settings (XMPP)
+#please don't use FQDN
 ALERTHOST="localhost"
 RASPHOST="localhost"
+
+## Alert Settings (XMPP)
 XMPPUSER="alert"
 XMPPDOMAIN=""
 XMPPPASS=""

@@ -125,6 +125,7 @@ case "$1" in
 
     alert)
 		HOST=$(detect_host "alert")
+		echo "detect_host returned: $HOST"
 		if [ "$HOST" == "localhost" ];
 		then
 	        alert "$2" "$3"
