@@ -123,15 +123,12 @@ case "$1" in
 		HOST=$(detect_host "proximity")
 		if [ $HOST == "localhost" ];
 		then
-			echo "proximity query $(host $(hostname) | awk '{ print $1 }')"
+			echo "proximity query on $(host $(hostname) | awk '{ print $1 }')"
 	        is_at_home
 		else
 			echo "forwarding proximity query to $HOST"
 			ssh root@$HOST /opt/james/new_event.sh is_at_home
 		fi
-
-		
-		is_at_home
 	;;
 
     alert)
