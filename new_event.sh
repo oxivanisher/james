@@ -100,7 +100,7 @@ case "$1" in
 
     prx_went_away)
         /etc/init.d/motion start >/dev/null 2>&1
-        $(which mpc) stop
+        #$(which mpc) stop
     ;;
 
 
@@ -128,7 +128,7 @@ case "$1" in
 	## XBMC events
 	xbmc_update)
 		$BASEDIR/scripts/xbmc.php update > /dev/null &
-		alert "XBMC video database is updating."
+		#alert "XBMC video database is updating."
 	;;
 
 

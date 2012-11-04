@@ -2,9 +2,17 @@
 source /opt/james/settings/settings.sh
 source $BASEDIR/include/func.*.sh
 
-echo -e "\nJames monitor is now starting"
+/etc/init.d/motion stop
+killall motion
+
+if [ -f /var/run/motion/motion.pid ];
+then
+	rm /var/run/motion/motion.pid
+fi
+
+echo -e "\nJames iproximity monitor is now starting"
 $BASEDIR/new_event.sh prx_went_away "Sleeping short ($PSHORT)"
-alert "James monitor active" &
+alert "James Services are now online." &
 
 PONLINE=0;
 STATE=2
@@ -20,8 +28,8 @@ while /bin/true; do
             cd $BOTDIR
             ONLINE=$($WHOISONLINE)
             cd $INPWD
-            alert "Welcome home. Perimeter surveillance is now deactivated." &
-            echo -e "$(date) master came home"
+            alert "Welcome back. It is now $(date +%H:%M)." &
+            echo -e "$(date) master came online"
 
 			if [ -f $ALERTCACHE ];
 			then
@@ -40,26 +48,31 @@ while /bin/true; do
 		LOGDATA=$(cat $ALERTCACHE)
 		rm $ALERTCACHE
 
-		alert "While you where gone, the following things happend:"
-		echo -e "$LOGDATA" | while read LOGLINE;
-		do
-			alert "$LOGLINE"
-		done
-		alert "End of Log."
+		if [ $(echo "$LOGDATA" | wc -l) == 1 ];
+		then
+			alert "Nothing happend while you where gone." &
+		else
+			alert "While you where gone, the following things happend:" &
+			echo -e "$LOGDATA" | while read LOGLINE;
+			do
+				alert "$LOGLINE" &
+			done
+			alert "End of Log." &
+		fi
 	fi
 
 	sleep $PLONG
 
 	while [[ $PONLINE -eq 1 ]]; do
 	    if [[ "$(check_pconnection)" -eq 1 ]]; then
-		echo -e "DEBUG: $(date) $PINGDEVICEMAC still online" >> $PDBGLOG
-                echo -e "$(date)\tmaster still home, sleeping for $PLONG seconds"
-		sleep $PLONG
+			echo -e "DEBUG: $(date) $PINGDEVICEMAC still online" >> $PDBGLOG
+            echo -e "$(date)\tmaster still home, sleeping for $PLONG seconds"
+			sleep $PLONG
 	    else
-		PONLINE=0
-		echo -e "DEBUG: $(date) $PINGDEVICEMAC not longer online." >> $PDBGLOG
-                echo -e "$(date)\tdevice away, sleeping for $PSHORT seconds"
-		sleep $PSHORT
+			PONLINE=0
+			echo -e "DEBUG: $(date) $PINGDEVICEMAC not longer online." >> $PDBGLOG
+			echo -e "$(date)\tdevice away, sleeping for $PSHORT seconds"
+			sleep $PSHORT
 	    fi
 	done
     else
@@ -71,7 +84,7 @@ while /bin/true; do
             cd $BOTDIR
             ONLINE=$($WHOISONLINE)
             cd $INPWD
-            alert "You left. Perimeter surveillance enabled." &
+            alert "You left." &
             echo -e "$(date)\tmaster went away! i am now a watchdog"
 
             STATE=0

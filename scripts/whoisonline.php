@@ -1,6 +1,7 @@
+#!/usr/bin/php
 <?php
 
-require_once("../settings/settings.php");
+require_once("/opt/james/settings/settings.php");
 
 #Who is online
 #Settings
@@ -59,10 +60,10 @@ foreach ($onlinemacs as $onlinemacsLine) {
                 $db[$tmpmac][2] = 0;                   #hidden
                 $db[$tmpmac][3] = "nobody";            #owner
                 $db[$tmpmac][4] = $out[0];             #online/ip
-                save_csv($dbfile, "\n" . $db[$tmpmac][0] . ";" . $tmpmac . ";" . $db[$tmpmac][1] . ";" . $db[$tmpmac][2] . ";" . $db[$tmpmac][3]);
+                save_csv($dbfile, $db[$tmpmac][0] . ";" . $tmpmac . ";" . $db[$tmpmac][1] . ";" . $db[$tmpmac][2] . ";" . $db[$tmpmac][3] . "\n");
 
                 # notify about and scan that thing
-                exec($GLOBALS['newEvent'] . " alert \"unknown host detected!\" " . $db[$tmpmac][4] . " (" . $tmpmac . ")");
+                exec($GLOBALS['newEvent'] . " alert \"Unknown host detected!\"");
             } else {
                 # this already known device is online
                 $db[$tmpmac][4] = $out[0]; #online/ip
