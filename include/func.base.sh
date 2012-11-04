@@ -105,7 +105,7 @@ function check_host_ips {
 	done
 
 	#1 means localhost
-	if [ $TMPBOOL > 0 ];
+	if [ $TMPBOOL -gt 0 ];
 	then
 		echo 1
 	else

@@ -125,12 +125,11 @@ case "$1" in
 
     alert)
 		HOST=$(detect_host "alert")
-		echo "detect_host returned: $HOST"
-		if [ "$HOST" == "localhost" ];
+		if [ $HOST == "localhost" ];
 		then
+			echo "alerting on $(hostname)"
 	        alert "$2" "$3"
 		else
-			echo "forwarding alert to $HOST"
 			ssh root@$HOST /opt/james/new_event.sh alert "$2" "$3"
 		fi
 
