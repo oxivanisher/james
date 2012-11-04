@@ -131,6 +131,14 @@ class JamesBot(JabberBot):
 			return xb
 
 		@botcmd
+		def xb(self, mess, args):
+			"""Manage RaspberryPi"""
+			ras_pipe = os.popen('../scripts/rasp.php ' + args, 'r')
+			ras = ras_pipe.read().strip()
+			ras_pipe.close()
+			return ras
+
+		@botcmd
 		def at(self, mess, args):
 			"""Notify on given time"""
 			at_pipe = os.popen('../scripts/at.sh ' + args, 'r')
@@ -196,11 +204,13 @@ class JamesBot(JabberBot):
 		#	old_status = []
 		#return
 
-		mpc_pipe = os.popen('tail -n 1 /tmp/james.log','r')
-		mpc = mpc_pipe.read().strip()
-		new_status.append(mpc)
-		new_status = mpc.join('\n')
+		#set my status?
+		#mpc_pipe = os.popen('tail -n 1 /tmp/james.log','r')
+		#mpc = mpc_pipe.read().strip()
+		#new_status.append(mpc)
+		#new_status = mpc.join('\n')
 		#status = mpc
+		status = "At your service, Sire"
 
 		if new_status != old_status:
 			old_status = new_status
