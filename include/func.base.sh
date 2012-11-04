@@ -102,7 +102,7 @@ function check_host_ips {
 	do
 		if [ "$(echo $IP | grep $MYIP)" != "" ];
 		then
-	#		echo "$(hostname) check_host_ips found localhost!" >&2
+		#	echo "$(hostname) check_host_ips found localhost!" >&2
 			echo 1 > $TMPDIR/james.check_host_ips.tmp
 		fi
 	done
@@ -134,17 +134,17 @@ function detect_host {
 			TMPHOST=$JABBERNODE
 		;;
 		*)
-			echo -1
+			echo "error!"
 		;;
 	esac
 
-	echo "$(hostname) detect_host result: $RESULT, returning host $TMPHOST" >&2
+#	echo "$(hostname) detect_host result: $RESULT, returning host $TMPHOST" >&2
 
 	if [ $RESULT == 1 ];
 	then
 		echo "localhost"
 	else
-		echo "$(host $TMPHOST | awk '{ print $1 }')"
+		echo "$(host $TMPHOST | awk '{ print $1 }' | uniq)"
 	fi
 
 }
