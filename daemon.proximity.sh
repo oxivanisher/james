@@ -28,7 +28,7 @@ while /bin/true; do
             cd $BOTDIR
             ONLINE=$($WHOISONLINE)
             cd $INPWD
-            alert "Welcome back. It is now $(date +%H:%M)." &
+            alert "Welcome! It is now $(date +%H:%M)." &
             echo -e "$(date) master came online"
 
 			if [ -f $ALERTCACHE ];
@@ -50,9 +50,9 @@ while /bin/true; do
 
 		if [ $(echo "$LOGDATA" | wc -l) == 1 ];
 		then
-			alert "Nothing happend while you where gone." &
+			alert "Nothing happend while we where appart." &
 		else
-			alert "While you where gone, the following things happend:" &
+			alert "While we where appart, the following things happend:" &
 			echo -e "$LOGDATA" | while read LOGLINE;
 			do
 				alert "$LOGLINE" &
