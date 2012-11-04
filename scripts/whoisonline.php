@@ -2,7 +2,7 @@
 <?php
 
 require_once("/opt/james/settings/settings.php");
-require_once("/opt/james/settings/func.base.php");
+require_once("/opt/james/include/func.base.php");
 
 
 #Who is online
