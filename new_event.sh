@@ -133,12 +133,15 @@ case "$1" in
 	;;
 
     alert)
-		if [ $(detect_host "alert") == "localhost" ];
+		HOST=$(detect_host "alert")
+		if [ $HOST == "localhost" ];
 		then
 			echo "processing alert event on $(host $(hostname) | awk '{ print $1 }')" >&2
 	        alert "$2" "$3"
 		else
+			echo 12$HOST
 			ssh root@$HOST /opt/james/new_event.sh alert "$2" "$3"
+			echo 34
 		fi
     ;;
 
@@ -152,7 +155,8 @@ case "$1" in
 
 	## Raspbery Pi events
 	rasp)
-		if [ $(detect_host "rasp") == "localhost" ];
+		HOST=$(detect_host "rasp")
+		if [ $HOST == "localhost" ];
 		then
 			echo "processing rasp event on $(host $(hostname) | awk '{ print $1 }')" >&2
 			$BASEDIR/scripts/rasp.php "$2" "$3" "$4" "$5"
