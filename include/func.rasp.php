@@ -100,12 +100,6 @@ function quitLoop($leds = array(), $buttons = array()) {
 	if (count($buttons) == 0) $buttons = $GLOBALS['BUTTONS'];
 	foreach ($buttons as $i) switchOff($i);
 	foreach ($leds as $i) switchOff($i);
-	jamesAlert("RaspJames shutting down.");
-}
-
-#james specific functions
-function jamesAlert($message) {
-	$message = str_replace(" ", "\ ", $message);
-	system('ssh root@xbmc.thunderbluff.ch /opt/james/new_event.sh alert \'' . $message . '\'');
+	alert("RaspJames shutting down.");
 }
 ?>

@@ -6,7 +6,6 @@ include('../include/func.base.php');
 include('../include/func.rasp.php');
 
 #init
-alert("RaspJames starting up.");
 initLoop();
 switchOn(0);
 $ATHOMECHECKLOOPS = 10000;
@@ -31,7 +30,6 @@ while ($run) {
 		blink(3, 1);
 		$return = newEvent("is_at_home");
 		if ($return == 0) {
-			echo "away\n";
 			switchOn(3);
 		}
 	}
