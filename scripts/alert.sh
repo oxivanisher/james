@@ -10,6 +10,8 @@ then
     MSG="$1\n$2"
 fi
 
+MSG=$(echo $MSG | sed 's/"//g')
+
 if [ $(cat $PSTATEFILE) -eq 1 ];
 then
     $(which espeak) -v en-rp -ven+m7  "$1" >/dev/null 2>&1
