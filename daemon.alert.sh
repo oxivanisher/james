@@ -2,7 +2,7 @@
 source /opt/james/settings/settings.sh
 source $BASEDIR/include/func.*.sh
 
-$ALERT "Alert daemon started"
+alert "Alert daemon started"
 
 while true;
 do
@@ -18,7 +18,7 @@ do
             if [ "a$LINE" != "a" ];
             then
                 echo -e "$(date) alerting"
-                echo $LINE | xargs $ALERT
+                $BASEDIR/scripts/alert.sh "$LINE"
                 sleep 1
             fi
         done < $ALERTMESSAGES.tmp
