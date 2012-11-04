@@ -127,10 +127,10 @@ case "$1" in
 		HOST=$(detect_host "alert")
 		if [ $HOST == "localhost" ];
 		then
-			echo "alerting on $(hostname)"
+			echo "alerting on $(host $(hostname) | awk '{ print $1 }')"
 	        alert "$2" "$3"
 		else
-			echo "forwarding to ssh root@$HOST"
+			echo "forwarding alert to ssh $HOST"
 			ssh root@$HOST /opt/james/new_event.sh alert "$2" "$3"
 		fi
 

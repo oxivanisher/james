@@ -95,22 +95,18 @@ function check_host_ips {
 	IPLIST=$(host $1 | awk '{ print $4 }')
 	MYIP=$(ip addr show | grep inet | grep -v "127.0.0.1/8" | awk '{ print $2}' | grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}')
 
-	TMPBOOL=0
+	echo 0 > $TMPDIR/james.check_host_ips.tmp
 	echo $IPLIST | while read IP;
 	do
 		if [ "$(echo $IP | grep $MYIP)" != "" ];
 		then
-			TMPBOOL=1
+	#		echo "$(hostname) check_host_ips found localhost!" >&2
+			echo 1 > $TMPDIR/james.check_host_ips.tmp
 		fi
 	done
 
-	#1 means localhost
-	if [ $TMPBOOL -gt 0 ];
-	then
-		echo 1
-	else
-		echo 0
-	fi
+	echo $(cat $TMPDIR/james.check_host_ips.tmp)
+	rm $TMPDIR/james.check_host_ips.tmp
 }
 
 function detect_host {
@@ -124,14 +120,15 @@ function detect_host {
 		;;
 		"rasp")
 			RESULT=$(check_host_ips "$RASPHOST")
-			TMPHOST=$RASP
+			TMPHOST=$RASPHOST
 		;;
 		*)
 			echo -1
 		;;
 	esac
 
-#	echo "result: $RESULT --"
+	#echo "$(hostname) detect_host result: $RESULT, returning host $TMPHOST" >&2
+
 	if [ $RESULT == 1 ];
 	then
 		echo "localhost"
