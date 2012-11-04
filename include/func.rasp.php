@@ -1,18 +1,7 @@
 <?php
 #helper functions
-function initLoop($leds = array(), $buttons = array()) {
-	wiringPiSetup();
-
-	if (count($leds) == 0) $leds = $GLOBALS['LEDS'];
-	if (count($buttons) == 0) $buttons = $GLOBALS['BUTTONS'];
-	asort($leds);
-	asort($buttons);
-
-	echo "resetting all lines...\n";
-	for ($i=0; $i < 8; $i++) {
-		switchOff($i);
-		wiringpi::pinMode($i, 1);
-	}
+function fancyInit($leds = array(), $buttons = array()) {
+	initLoop($leds, $buttons);
 
 	echo "initializing leds: ";
 	foreach ($leds as $i) {
@@ -32,7 +21,22 @@ function initLoop($leds = array(), $buttons = array()) {
 	$GLOBALS['powerBlinkCount'] = 0;
 	$GLOBALS['POWERLEDBLINKINT'] = 5;
 	$GLOBALS['POWERLEDBLINKNUM'] = 1;
+
 	register_shutdown_function('quitLoop');
+}
+function initLoop($leds = array(), $buttons = array()) {
+	wiringPiSetup();
+
+	if (count($leds) == 0) $leds = $GLOBALS['LEDS'];
+	if (count($buttons) == 0) $buttons = $GLOBALS['BUTTONS'];
+	asort($leds);
+	asort($buttons);
+
+	echo "resetting all lines...\n";
+	for ($i=0; $i < 8; $i++) {
+		switchOff($i);
+		wiringpi::pinMode($i, 1);
+	}
 }
 function switchOn($pin) {
 	wiringpi::digitalWrite($pin, 1);

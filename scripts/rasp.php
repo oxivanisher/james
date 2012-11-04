@@ -1,3 +1,4 @@
+#!/usr/bin/php
 <?php
 ini_set("enable_dl","On");
 include('/opt/james/include/wiringpi.php');

@@ -7,7 +7,7 @@ include('../include/func.rasp.php');
 
 #init
 alert("RaspJames starting up.");
-initLoop();
+fancyInit();
 switchOn(0);
 $ATHOMECHECKLOOPS = 10000;
 $atHomeCheckLoop = 0;
