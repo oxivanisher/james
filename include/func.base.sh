@@ -4,22 +4,11 @@ source $BASEDIR/include/func.proximity.sh
 
 function check_files {
     ERROR=""
-    CFGFILES="settings/james.cfg\
-        settings/settings.sh\
+    CFGFILES="settings/settings.sh\
 		settings/settings.php"
 
-    EXTFILES="ntpdate-debian\
-        python\
-        hcitool\
-        l2ping\
-        rsync\
-        nmap\
-        etherwake\
-        arp-scan\
-        sendxmpp\
-        espeak\
+    EXTFILES="etherwake\
         php\
-        motion\
         screen\
 		host\
 		ip"
@@ -60,6 +49,14 @@ function check_files {
 }
 
 function start_daemon {
+	#extfiles
+	# jabber: python nmap
+    # proximity: hcitool l2ping rsync nmap arp-scan etherwake motion
+	# alert: sendxmpp espeak
+
+	#cfgfiles
+	# jabber: settings/james.cfg
+
 	TARGETHOST=$(detect_host $1)
 	echo "checking for $1 in $(detect_host $1)"
 	if [ "$TARGETHOST" == "localhost" ];
