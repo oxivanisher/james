@@ -18,10 +18,11 @@ while ($run) {
 		if (buttonCheck($i)) {
 			echo "here we go for button " . $i . "\n";
 			jamesAlert("Button " . $i . " pressed.");
+			$GLOBALS['POWERLEDBLINKNUM']++;
 		}
 	}
 
-	$run = quitCheck();
+	$run = sleepLoop();
 
 }
 

@@ -29,6 +29,9 @@ function initLoop($leds = array(), $buttons = array()) {
 	}
 	echo "\n";
 
+	$GLOBALS['powerBlinkCount'] = 0;
+	$GLOBALS['POWERLEDBLINKINT'] = 5;
+	$GLOBALS['POWERLEDBLINKNUM'] = 1;
 	register_shutdown_function('quitLoop');
 }
 function switchOn($pin) {
@@ -65,7 +68,7 @@ function buttonCheck($pin, $reset = 0) {
 	}
 	return false;
 }
-function quitCheck() {
+function sleepLoop() {
 	foreach ($GLOBALS['quitCounter'] as $counter) {
 		if ($counter >= ($GLOBALS['QUITTIME'] * round(1000000 / $GLOBALS['LOOPUSLEEP']))) {
 			echo "pressed a button for longer than " . $GLOBALS['QUITTIME'] . " secs. exiting...\n";
@@ -73,7 +76,21 @@ function quitCheck() {
 			return false;
 		}
 	}
-	usleep ($GLOBALS['LOOPUSLEEP']);
+
+	$maxBlinkCount = round(($GLOBALS['POWERLEDBLINKINT'] * 1000000) / ($GLOBALS['POWERLEDBLINKNUM'] * 100000 * 2));
+	$tmpUsleep = $GLOBALS['LOOPUSLEEP'];
+	if ($GLOBALS['POWERLEDBLINKNUM'] > $maxBlinkCount) {
+		echo "max blinks in sleep loop reached (" . $maxBlinkCount . ")\n";
+		$GLOBALS['POWERLEDBLINKNUM'] = $maxBlinkCount;
+	}
+	if ($GLOBALS['powerBlinkCount'] >= ($GLOBALS['POWERLEDBLINKINT'] * round(1000000 / $GLOBALS['LOOPUSLEEP']))) {
+		$GLOBALS['powerBlinkCount'] = 0;
+		blink(0, $GLOBALS['POWERLEDBLINKNUM'], 100000);
+		$tmpUsleep = $tmpUsleep - ($GLOBALS['POWERLEDBLINKNUM'] * 2 * 100000);
+	}
+	$GLOBALS['powerBlinkCount']++;
+
+	if ($tmpUsleep > 0) usleep ($tmpUsleep);
 	return true;
 }
 function quitLoop($leds = array(), $buttons = array()) {
@@ -81,7 +98,7 @@ function quitLoop($leds = array(), $buttons = array()) {
 	if (count($buttons) == 0) $buttons = $GLOBALS['BUTTONS'];
 	foreach ($buttons as $i) switchOff($i);
 	foreach ($leds as $i) switchOff($i);
-	alert("RaspJames shutting down.");
+	jamesAlert("RaspJames shutting down.");
 }
 
 #james specific functions
