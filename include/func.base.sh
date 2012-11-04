@@ -7,8 +7,7 @@ function check_files {
     CFGFILES="settings/settings.sh\
 		settings/settings.php"
 
-    EXTFILES="etherwake\
-        php\
+    EXTFILES="php\
         screen\
 		host\
 		ip"
