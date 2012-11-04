@@ -123,10 +123,9 @@ case "$1" in
 		HOST=$(detect_host "proximity")
 		if [ $HOST == "localhost" ];
 		then
-			echo "proximity query on $(host $(hostname) | awk '{ print $1 }')" >&2
+			echo "processing proximity query on $(host $(hostname) | awk '{ print $1 }')" >&2
 	        is_at_home
 		else
-			echo "forwarding proximity query to $HOST" >&2
 			ssh root@$HOST /opt/james/new_event.sh is_at_home
 		fi
 	;;
@@ -135,10 +134,9 @@ case "$1" in
 		HOST=$(detect_host "alert")
 		if [ $HOST == "localhost" ];
 		then
-			echo "alerting on $(host $(hostname) | awk '{ print $1 }')" >&2
+			echo "processing alert event on $(host $(hostname) | awk '{ print $1 }')" >&2
 	        alert "$2" "$3"
 		else
-			echo "forwarding alert to $HOST" >&2
 			ssh root@$HOST /opt/james/new_event.sh alert "$2" "$3"
 		fi
 
