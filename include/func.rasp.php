@@ -1,6 +1,11 @@
 <?php
 #helper functions
 function fancyInit($leds = array(), $buttons = array()) {
+	if (count($leds) == 0) $leds = $GLOBALS['LEDS'];
+	if (count($buttons) == 0) $buttons = $GLOBALS['BUTTONS'];
+	asort($leds);
+	asort($buttons);
+
 	initLoop($leds, $buttons);
 
 	echo "initializing leds: ";
