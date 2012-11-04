@@ -2,6 +2,8 @@
 <?php
 
 require_once("/opt/james/settings/settings.php");
+require_once("/opt/james/settings/func.base.php");
+
 
 #Who is online
 #Settings
@@ -47,7 +49,7 @@ foreach (load_csv($dbfile) as $entry) {
 
 # scan for devices
 $onlinemacs = null;
-exec($GLOBALS['newEvent'] . " arp_scan", $onlinemacs);
+$onlinemacs = newEvent("arp_scan");
 foreach ($onlinemacs as $onlinemacsLine) {
     $out = split("	", $onlinemacsLine);
     if (count($out) > 1) {
@@ -63,7 +65,7 @@ foreach ($onlinemacs as $onlinemacsLine) {
                 save_csv($dbfile, $db[$tmpmac][0] . ";" . $tmpmac . ";" . $db[$tmpmac][1] . ";" . $db[$tmpmac][2] . ";" . $db[$tmpmac][3] . "\n");
 
                 # notify about and scan that thing
-                exec($GLOBALS['newEvent'] . " alert \"Unknown host detected!\"");
+                alert("Unknown host detected!");
             } else {
                 # this already known device is online
                 $db[$tmpmac][4] = $out[0]; #online/ip

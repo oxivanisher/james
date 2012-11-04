@@ -2,6 +2,7 @@
 ini_set("enable_dl","On");
 include('../include/wiringpi.php');
 include('../settings/settings.php');
+include('../include/func.base.php');
 include('../include/func.rasp.php');
 
 #init
@@ -28,13 +29,15 @@ while ($run) {
 	if ($atHomeCheckLoop > $ATHOMECHECKLOOPS) {
 		$atHomeCheckLoop = 0;
 		blink(3, 1);
-		$result = system("/opt/james/new_event.sh  is_at_home");
-		if ($result) {
-			echo "at home...\n";
-			switchOff(3);
-		} else {
-			echo "away...\n";
+		ob_start();
+		passthru("/opt/james/new_event.sh  is_at_home", $return);
+		$content_grabbed=ob_get_contents();
+		ob_end_clean();
+		if (! $content_grabbed) {
+			echo "away\n";
 			switchOn(3);
+		} else {
+			echo "home\n";
 		}
 	}
 
