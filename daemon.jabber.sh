@@ -7,6 +7,7 @@ OLDPWD=$(pwd)
 cd $BOTDIR
 while true; do
     echo -e "XMPP Daemon starting. Hit ctrl+c for clean shutdown"
+	alert "Sir James is starting"
     $(which python) ./james.jabber.py
     echo -e "Press ctrl+c again within the next 10 seconds for definitive shutdown"
     sleep 5

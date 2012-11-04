@@ -138,7 +138,7 @@ function detect_host {
 		;;
 	esac
 
-	#echo "$(hostname) detect_host result: $RESULT, returning host $TMPHOST" >&2
+	echo "$(hostname) detect_host result: $RESULT, returning host $TMPHOST" >&2
 
 	if [ $RESULT == 1 ];
 	then
