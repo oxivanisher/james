@@ -30,7 +30,7 @@ function check_files {
         then
             continue
         fi
-        ERROR="$FILE"
+        ERROR="$ERROR $FILE"
         break
     done
 
@@ -40,7 +40,7 @@ function check_files {
         then
             continue
         fi
-        ERROR="$FILE"
+        ERROR="$ERROR $FILE"
         break
     done
 
@@ -49,6 +49,7 @@ function check_files {
         return 0
     else
         echo -e "$ERROR not found!"
+		
         return 1
     fi
 
