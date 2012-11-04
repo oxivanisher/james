@@ -122,6 +122,14 @@ function detect_host {
 			RESULT=$(check_host_ips "$RASPHOST")
 			TMPHOST=$RASPHOST
 		;;
+		"proximity")
+			RESULT=$(check_host_ips "$PROXIMITYHOST")
+			TMPHOST=$PROXIMITYHOST
+		;;
+		"xmpp")
+			RESULT=$(check_host_ips "$XMPPHOST")
+			TMPHOST=$XMPPHOST
+		;;
 		*)
 			echo -1
 		;;

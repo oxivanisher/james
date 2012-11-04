@@ -7,6 +7,8 @@ TMPDIR="/tmp"
 #please don't use FQDN
 ALERTHOST="localhost"
 RASPHOST="localhost"
+PROXIMITYHOST="localhost"
+XBMCHOST="localhost"
 
 ## Alert Settings (XMPP)
 XMPPUSER="alert"
