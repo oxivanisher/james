@@ -39,6 +39,5 @@ function transfer_file {
 }
 
 function is_at_home {
-	echo $PSTATEFILE
 	cat $PSTATEFILE
 }
