@@ -50,7 +50,8 @@ function check_files {
 function start_daemon {
 	#extfiles
 	# jabber: python nmap
-    # proximity: hcitool l2ping rsync nmap arp-scan etherwake motion
+    # proximity: hcitool l2ping rsync nmap arp-scan etherwake motion 
+	# whoisonline: nbtscan
 	# alert: sendxmpp espeak
 
 	#cfgfiles

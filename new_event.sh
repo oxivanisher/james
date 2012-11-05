@@ -107,14 +107,28 @@ case "$1" in
 
     ## Proximity events
     scan_host)
-        function run {
+        function scanHostRun {
+			#get a actual oui file from http://standards.ieee.org/develop/regauth/oui/oui.txt
+		    oui=$(sed -ne '{
+		        # strip all punctuation
+		        s/[\.:\-]//g
+		
+		        # convert to uppercase
+		        s/[a-f]/\u&/g
+		
+		        # rewrite to canonical format
+		        s/^\([0-9A-F]\{2\}\)\([0-9A-F]\{2\}\)\([0-9A-F]\{2\}\).*/\1-\2-\3/p
+		    } ' <<< $2)
+
             DATE=$(date)
-            MACV=get_mac_vendor $1
-            NMAPR=nmap_scan $2
-            echo -e "$DATE\n$MACV\n$NMAPR" >> $NEWFILE
-            alert "Unknown host detected" "\n$DATE\n$MACV\n$NMAPR"
+			HOSTNAME=$(host $1 | awk {'print $5'} | awk -F. '{ print $1 }')
+            MACV=$(sed -n "/^${oui}/,/^$/p" ${MACVENDORFILE})
+            NMAP=$(/usr/bin/nmap -O $1)
+			NBTSCAN=$(/usr/bin/nbtscan $1)
+            echo -e "========= $HOSTNAME =========\nDate: $DATE\n\n$MACV\n\n$NBTSCAN\n\n$NMAP" >> $NEWFILE
+            alert "Unknown host $HOSTNAME scanned." # "\n$DATE\n$HOSTNAME\n$MACV\n$NMAPR"
         }
-        run $1 $2 &
+        scanHostRun $2 $3 &
     ;;
 
     arp_scan)

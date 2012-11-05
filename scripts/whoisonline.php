@@ -66,7 +66,7 @@ foreach ($onlinemacs as $onlinemacsLine) {
                 save_csv($dbfile, $db[$tmpmac][0] . ";" . $tmpmac . ";" . $db[$tmpmac][1] . ";" . $db[$tmpmac][2] . ";" . $db[$tmpmac][3] . "\n");
 
                 # notify about and scan that thing
-                alert("Unknown host detected!");
+				newEvent(" scan_host " . $out[0] . " " . $out[1]);
             } else {
                 # this already known device is online
                 $db[$tmpmac][4] = $out[0]; #online/ip
