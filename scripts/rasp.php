@@ -80,7 +80,16 @@ switch ($GLOBALS['argv'][1]) {
 		}
 	break;;
 
+	case "blink":
+		if ($GLOBALS['argv'][4]) {
+			blink($GLOBALS['argv'][2], $GLOBALS['argv'][3], $GLOBALS['argv'][4]);
+			echo "done";
+		} else {
+			echo "please specify pin amount duration";
+		}
+	break;;
+
 	default:
-		echo "commands: ledTest, status, switchOn, switchOff";
+		echo "commands: ledTest, status, switchOn, switchOff, blink";
 }
 ?>

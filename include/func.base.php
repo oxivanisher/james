@@ -10,9 +10,9 @@ function newEvent($event) {
 }
 
 function alert($message) {
-	$message = str_replace(" ", "\ ", $message);
-	newEvent("alert \"" . $message . "\" >/dev/null 2>&1 &");
-    return $message;
+	$modMessage = str_replace(" ", "\ ", $message);
+	exec("/opt/james/new_event.sh alert \"" . $modMessage . "\" >/dev/null 2>&1 &");
+    return "Alerted: $message\n";
 }
 
 ?>
