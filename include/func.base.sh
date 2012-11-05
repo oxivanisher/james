@@ -109,7 +109,7 @@ function check_host_ips {
 	done
 
 	echo $(cat $TMPDIR/james.check_host_ips.tmp)
-	rm $TMPDIR/james.check_host_ips.tmp
+	rm $TMPDIR/james.check_host_ips.tmp >/dev/null
 }
 
 function detect_host {

@@ -55,7 +55,7 @@ while ($run) {
 		$timeBetweenMainLoopsCount++;
 		if ($timeBetweenMainLoopsCount >= 10000) {
 		#	echo "it took " . (microtime(true) - $timeBetweenMainLoops) . " seconds for 10000 main loops.\n";
-			echo "main loop performance: ~ " . round((10000 / (microtime(true) - $timeBetweenMainLoops)), 2) . " loops per second\n";
+			echo "main loop performance: ~" . round((10000 / (microtime(true) - $timeBetweenMainLoops)), 2) . " loops per second\n";
 			$timeBetweenMainLoopsCount = 0;
 			$timeBetweenMainLoops = microtime(true);
 		}
