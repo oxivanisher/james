@@ -104,27 +104,24 @@ function buttonCheck($pin, $reset = 0) {
     return false;
 }
 function sleepLoop($id) {
-#	foreach ($GLOBALS['quitCounter'][$id] as $counter) {
 	$counter = $GLOBALS['quitCounter'][$id];
 	if ($counter >= ($GLOBALS['QUITTIME'] * round(1000000 / $GLOBALS['LOOPUSLEEP']))) {
 		alert("pressed button " . $id . " for " . $GLOBALS['QUITTIME'] . " seconds.\n");
 		blink(3, 5, 50000);
+		# this is our exit signal. rasp james will exit now
 		return false;
 	}
-	
 
-	$maxBlinkCount = round(($GLOBALS['POWERLEDBLINKINT'] * 1000000) / ($GLOBALS['POWERLEDBLINKNUM'] * 100000 * 2), 0, PHP_ROUND_HALF_DOWN);
 	$tmpUsleep = $GLOBALS['LOOPUSLEEP'];
-
+	$maxBlinkCount = round(($GLOBALS['POWERLEDBLINKINT'] * 400000) / ($GLOBALS['POWERLEDBLINKNUM'] * 40000 * 2), 0, PHP_ROUND_HALF_DOWN);
+	
 	if ($GLOBALS['POWERLEDBLINKNUM'] > $maxBlinkCount) {
-	#	echo "max blinks while sleep loop reached (" . $GLOBALS['POWERLEDBLINKNUM'] . "/" . $maxBlinkCount . ")\n";
 		$GLOBALS['POWERLEDBLINKNUM'] = $maxBlinkCount;
 	}
-	if ($GLOBALS['powerBlinkCount'] >= ($GLOBALS['POWERLEDBLINKINT'] * round(1000000 / $GLOBALS['LOOPUSLEEP']))) {
+	if ($GLOBALS['powerBlinkCount'] >= $GLOBALS['PWRLEDLOOPBLINK']) {
 		$GLOBALS['powerBlinkCount'] = 0;
-	#	echo "blinking " . $GLOBALS['POWERLEDBLINKNUM'] . "/" . $maxBlinkCount . " times\n";
-		blink(0, $GLOBALS['POWERLEDBLINKNUM'], 100000);
-		$tmpUsleep = $tmpUsleep - ($GLOBALS['POWERLEDBLINKNUM'] * 2 * 100000);
+		blink(0, $GLOBALS['POWERLEDBLINKNUM'], 40000);
+		$tmpUsleep = $tmpUsleep - ($GLOBALS['POWERLEDBLINKNUM'] * 2 * 40000);
 	}
 	$GLOBALS['powerBlinkCount']++;
 

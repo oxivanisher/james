@@ -150,7 +150,7 @@ case "$1" in
 		HOST=$(detect_host "alert")
 		if [ $HOST == "localhost" ];
 		then
-			echo "processing alert event on $(host $(hostname) | awk '{ print $1 }')" >&2
+		#	echo "processing alert event on $(host $(hostname) | awk '{ print $1 }')" >&2
 	        alert "$2" "$3"
 		else
 			ssh root@$HOST /opt/james/new_event.sh alert "$2" "$3"
@@ -170,7 +170,7 @@ case "$1" in
 		HOST=$(detect_host "rasp")
 		if [ $HOST == "localhost" ];
 		then
-			echo "processing rasp event on $(host $(hostname) | awk '{ print $1 }')" >&2
+		#	echo "processing rasp event on $(host $(hostname) | awk '{ print $1 }')" >&2
 			$BASEDIR/scripts/rasp.php "$2" "$3" "$4" "$5"
 		else
 			ssh root@$HOST /opt/james/new_event.sh rasp "$2" "$3" "$4" "$5"
