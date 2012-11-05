@@ -3,8 +3,10 @@
 function fancyInit($leds = array(), $buttons = array()) {
 	if (count($leds) == 0) $leds = $GLOBALS['LEDS'];
 	if (count($buttons) == 0) $buttons = $GLOBALS['BUTTONS'];
+	if (count($switches) == 0) $switches = $GLOBALS['SWITCHES'];
 	asort($leds);
 	asort($buttons);
+	asort($switches);
 
 	initLoop($leds, $buttons);
 
@@ -23,6 +25,14 @@ function fancyInit($leds = array(), $buttons = array()) {
 	}
 	echo "\n";
 
+	echo "initializing switches: ";
+	foreach ($switches as $i) {
+		echo $i . " ";
+		switchOn($i);
+		$GLOBALS['switchState'][$i] = 1;
+	}
+	echo "\n";
+
 	$GLOBALS['powerBlinkCount'] = 0;
 	$GLOBALS['POWERLEDBLINKINT'] = 5;
 	$GLOBALS['POWERLEDBLINKNUM'] = 1;
@@ -34,8 +44,10 @@ function initLoop($leds = array(), $buttons = array()) {
 
 	if (count($leds) == 0) $leds = $GLOBALS['LEDS'];
 	if (count($buttons) == 0) $buttons = $GLOBALS['BUTTONS'];
+	if (count($switches) == 0) $switches = $GLOBALS['SWITCHES'];
 	asort($leds);
 	asort($buttons);
+	asort($switches);
 
 	echo "resetting all lines...\n";
 	for ($i=0; $i < 8; $i++) {
@@ -57,34 +69,49 @@ function blink($pin, $amount = 1, $duration = 100000) {
 		usleep($duration);
 	}
 }
-function buttonCheck($pin, $reset = 0) {
-	if ($reset == 0) $reset = $GLOBALS['BUTTONRESET'];
-	if (wiringpi::digitalRead($pin)) {
-		if (($GLOBALS['buttonLock'][$pin] + $reset) < time() AND $GLOBALS['buttonLock'][$pin] != 0) {
-			switchOff(1);
-			$GLOBALS['quitCounter'][$pin] = 0;
-			$GLOBALS['buttonLock'][$pin] = 0;
-			echo "button lock reset on pin " . $pin . "\n";
-		}
+function switchCheck($pin) {
+	$actualState = wiringpi::digitalRead($pin);
+	$ret = false;
+	if ($actualState != $GLOBALS['switchState'][$pin]) {
+		$GLOBALS['switchState'][$pin] = $actualState;
+		$ret = true;
+	}
+	if ($actualState) {
+		switchOff(2);
 	} else {
-		switchOn(1);
-		$GLOBALS['quitCounter'][$pin]++;
-		if (($GLOBALS['buttonLock'][$pin] + $reset) < time()) {
-			$GLOBALS['buttonLock'][$pin] = time();
-			echo "button " . $pin . " pressed and locked for " . $reset . " seconds.\n";
-			return true;
-		}
+		switchOn(2);
 	}
-	return false;
+	return $ret;
 }
-function sleepLoop() {
-	foreach ($GLOBALS['quitCounter'] as $counter) {
-		if ($counter >= ($GLOBALS['QUITTIME'] * round(1000000 / $GLOBALS['LOOPUSLEEP']))) {
-			echo "pressed a button for longer than " . $GLOBALS['QUITTIME'] . " secs. exiting...\n";
-			blink(3, 2);
-			return false;
-		}
+function buttonCheck($pin, $reset = 0) {
+    if ($reset == 0) $reset = $GLOBALS['BUTTONRESET'];
+    if (wiringpi::digitalRead($pin)) {
+        if (($GLOBALS['buttonLock'][$pin] + $reset) < time() AND $GLOBALS['buttonLock'][$pin] != 0) {
+            switchOff(1);
+            $GLOBALS['quitCounter'][$pin] = 0;
+            $GLOBALS['buttonLock'][$pin] = 0;
+            echo "button lock reset on pin " . $pin . "\n";
+        }
+    } else {
+        switchOn(1);
+        $GLOBALS['quitCounter'][$pin]++;
+        if (($GLOBALS['buttonLock'][$pin] + $reset) < time()) {
+            $GLOBALS['buttonLock'][$pin] = time();
+            echo "button " . $pin . " pressed and locked for " . $reset . " seconds.\n";
+            return true;
+        }
+    }
+    return false;
+}
+function sleepLoop($id) {
+#	foreach ($GLOBALS['quitCounter'][$id] as $counter) {
+	$counter = $GLOBALS['quitCounter'][$id];
+	if ($counter >= ($GLOBALS['QUITTIME'] * round(1000000 / $GLOBALS['LOOPUSLEEP']))) {
+		alert("pressed button " . $id . " for longer than " . $GLOBALS['QUITTIME'] . " seconds. Rasp James shutting down...\n");
+		blink(3, 2);
+		return false;
 	}
+	
 
 	$maxBlinkCount = round(($GLOBALS['POWERLEDBLINKINT'] * 1000000) / ($GLOBALS['POWERLEDBLINKNUM'] * 100000 * 2), 0, PHP_ROUND_HALF_DOWN);
 	$tmpUsleep = $GLOBALS['LOOPUSLEEP'];

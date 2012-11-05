@@ -48,6 +48,18 @@ switch ($GLOBALS['argv'][1]) {
 
 			echo $button . ": " . $str . "\n";
 		}
+
+		echo "_Switch_\n";
+		asort($GLOBALS['SWITCHES']);
+		foreach ($GLOBALS['SWITCHES'] as $switch) {
+			if (wiringpi::digitalRead($switch) == 1) {
+				$str = "open";
+			} else {
+				$str = "closed";
+			}
+
+			echo $switch . ": " . $str . "\n";
+		}
 	break;;
 
 	case "switchOn":

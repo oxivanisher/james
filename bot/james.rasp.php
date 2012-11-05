@@ -18,25 +18,38 @@ $run = true;
 while ($run) {
 	$atHomeCheckLoop++;
 
-	for ($i=4; $i < 8; $i++) {
+	foreach ($GLOBALS['BUTTONS'] as $i) {
 		if (buttonCheck($i)) {
 			echo "here we go for button " . $i . "\n";
 			alert("Button " . $i . " pressed.");
 			$GLOBALS['POWERLEDBLINKNUM']++;
 		}
 	}
-	
+
+	foreach ($GLOBALS['SWITCHES'] as $i) {
+		$result = switchCheck($i);
+
+		if ($GLOBALS['switchState'][$i] == 1) {
+			$str = "open";
+		} else {
+			$str = "closed";
+		}
+
+		if ($result) {
+			alert ("Switch " . $i . " changed state to: " . $str . "\n");
+		}
+	}
+		
 	if ($atHomeCheckLoop > $ATHOMECHECKLOOPS) {
 		$atHomeCheckLoop = 0;
 		blink(3, 1);
 		$return = newEvent("is_at_home");
 		if ($return == 0) {
-			echo "away\n";
 			switchOn(3);
 		}
 	}
 
-	$run = sleepLoop();
+	$run = sleepLoop(7);
 }
 
 ?>
