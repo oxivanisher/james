@@ -107,7 +107,7 @@ function sleepLoop($id) {
 #	foreach ($GLOBALS['quitCounter'][$id] as $counter) {
 	$counter = $GLOBALS['quitCounter'][$id];
 	if ($counter >= ($GLOBALS['QUITTIME'] * round(1000000 / $GLOBALS['LOOPUSLEEP']))) {
-		alert("pressed button " . $id . " for longer than " . $GLOBALS['QUITTIME'] . " seconds. Rasp James shutting down...\n");
+		alert("pressed button " . $id . " for " . $GLOBALS['QUITTIME'] . " seconds.\n");
 		blink(3, 2);
 		return false;
 	}

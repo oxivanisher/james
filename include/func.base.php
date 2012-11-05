@@ -11,7 +11,7 @@ function newEvent($event) {
 
 function alert($message) {
 	$message = str_replace(" ", "\ ", $message);
-	newEvent("alert \"" . $message . "\"");
+	newEvent("alert \"" . $message . "\" >/dev/null 2>&1 &");
     return $message;
 }
 
