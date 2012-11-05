@@ -1,6 +1,6 @@
 <?php
 #helper functions
-function fancyInit($leds = array(), $buttons = array()) {
+function fancyInit($leds = array(), $buttons = array(), $switches = array()) {
 	if (count($leds) == 0) $leds = $GLOBALS['LEDS'];
 	if (count($buttons) == 0) $buttons = $GLOBALS['BUTTONS'];
 	if (count($switches) == 0) $switches = $GLOBALS['SWITCHES'];
@@ -39,7 +39,7 @@ function fancyInit($leds = array(), $buttons = array()) {
 
 	register_shutdown_function('quitLoop');
 }
-function initLoop($leds = array(), $buttons = array()) {
+function initLoop($leds = array(), $buttons = array(), $switches = array()) {
 	wiringPiSetup();
 
 	if (count($leds) == 0) $leds = $GLOBALS['LEDS'];

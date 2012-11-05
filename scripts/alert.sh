@@ -17,7 +17,7 @@ then
     $(which espeak) -v en-rp -ven+m7  "$1" >/dev/null 2>&1
 else
 	echo -e "At $(date +%H:%M): $1" >> $ALERTCACHE
-	echo -e "$MSG" | $(which sendxmpp) -r Alert -u $XMPPUSER -p $XMPPPASS -j $XMPPDOMAIN $XMPPTARGET >/dev/null #2>&1 &
+	echo -e "$MSG" | $(which sendxmpp) -r Alert -u $XMPPUSER -p $XMPPPASS -j $XMPPDOMAIN $XMPPTARGET >/dev/null 2>&1 &
 
 fi
 
