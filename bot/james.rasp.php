@@ -8,9 +8,8 @@ include('../include/func.rasp.php');
 #init
 alert("RaspJames starting up.");
 fancyInit();
-switchOn(0);
 $ATHOMECHECKLOOPS = 10000;
-$atHomeCheckLoop = 0;
+$atHomeCheckLoop = $ATHOMECHECKLOOPS;
 
 #main loop
 echo "looping...\n";
@@ -41,14 +40,15 @@ while ($run) {
 		
 	if ($atHomeCheckLoop > $ATHOMECHECKLOOPS) {
 		$atHomeCheckLoop = 0;
+		switchOff(3);
 		blink(3, 2, 50000);
 		$return = newEvent("is_at_home");
 		if ($return == 0) {
 			switchOn(3);
 		}
+	} else {
+		$run = sleepLoop(7);
 	}
-
-	$run = sleepLoop(7);
 }
 
 ?>
