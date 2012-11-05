@@ -8,7 +8,8 @@ cd $BOTDIR
 while true; do
     echo -e "RaspBerry Pi Daemon starting. Hit ctrl+c for a clean shutdown."
     $(which php) ./james.rasp.php
-    echo -e "Press ctrl+c again within the next 5 seconds for definitive shutdown."
+    echo -e "Press ctrl+c again within the next 5 seconds for definitive shutdown.\n\n\n"
     sleep 5
+	clear
 done
 

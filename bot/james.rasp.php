@@ -9,9 +9,9 @@ include('../include/func.rasp.php');
 alert("RaspJames starting up.");
 fancyInit();
 $atHomeCheckLoop = $GLOBALS['ATHOMECHECKLOOPS'];
-$timeBetweenHomeChecks = microtime(true);
-$timeBetweenMainLoops = microtime(true);
 $initTime = microtime(true);
+$timeBetweenHomeChecks = $initTime;
+$timeBetweenMainLoops = $initTime;
 $timeBetweenMainLoopsCount = 0;
 
 #main loop
@@ -42,7 +42,7 @@ while ($run) {
 	}
 		
 	if ($atHomeCheckLoop > $GLOBALS['ATHOMECHECKLOOPS']) {
-		echo "at home check time interval: " . (microtime(true) - $timeBetweenHomeChecks) . " seconds.\n";
+		echo "at home check time interval: " . round((microtime(true) - $timeBetweenHomeChecks), 2) . " seconds.\n";
 		$timeBetweenHomeChecks = microtime(true);
 		$atHomeCheckLoop = 0;
 		switchOff(3);
@@ -54,7 +54,8 @@ while ($run) {
 	} else {
 		$timeBetweenMainLoopsCount++;
 		if ($timeBetweenMainLoopsCount >= 10000) {
-			echo "it took " . (microtime(true) - $timeBetweenMainLoops) . " seconds for 10000 main loops.\n";
+		#	echo "it took " . (microtime(true) - $timeBetweenMainLoops) . " seconds for 10000 main loops.\n";
+			echo "main loop performance: ~ " . round((10000 / (microtime(true) - $timeBetweenMainLoops)), 2) . " loops per second\n";
 			$timeBetweenMainLoopsCount = 0;
 			$timeBetweenMainLoops = microtime(true);
 		}
