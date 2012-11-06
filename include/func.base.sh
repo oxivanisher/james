@@ -140,11 +140,21 @@ function detect_host {
 	esac
 
 #	echo "$(hostname) detect_host result: $RESULT, returning host $TMPHOST" >&2
-
-	if [ $RESULT == "" ];
+#
+#	if [ $RESULT == "" ];
+#	then
+#		echo "error_no_host_found"
+#	elif [ $RESULT == 1 ];
+#	then
+#		echo "localhost"
+#	else
+#		echo "$(host $TMPHOST | awk '{ print $1 }' | uniq)"
+#	fi
+	
+	if [ $TMPHOST == "" ];
 	then
 		echo "error_no_host_found"
-	elif [ $RESULT == 1 ];
+	elif [ $TMPHOST == $(hostname) ];
 	then
 		echo "localhost"
 	else
