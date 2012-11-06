@@ -135,13 +135,16 @@ function detect_host {
 			TMPHOST=$JABBERNODE
 		;;
 		*)
-			echo "error!"
+			echo "error, no module choosen."
 		;;
 	esac
 
 #	echo "$(hostname) detect_host result: $RESULT, returning host $TMPHOST" >&2
 
-	if [ $RESULT == 1 ];
+	if [ $RESULT == "" ];
+	then
+		echo "error_no_host_found"
+	elif [ $RESULT == 1 ];
 	then
 		echo "localhost"
 	else
