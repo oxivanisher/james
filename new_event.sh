@@ -35,10 +35,7 @@ case "$1" in
         chmod 777 $MOTIONDIR
 
         echo -e -n "\tChecking daemons: "
-        start_daemon jabber
-        start_daemon alert
-        start_daemon proximity
-		start_daemon rasp
+		start_all_daemons
         echo -e "> done"
 
         echo -e "\t=> Everything is running now\n"
@@ -47,11 +44,7 @@ case "$1" in
 
     periodic)
         $WHOISONLINE >/dev/null 2>&1
-
-        start_daemon jabber >/dev/null 2>&1
-        start_daemon alert >/dev/null 2>&1
-        start_daemon proximity >/dev/null 2>&1
-		start_daemon rasp >/dev/null 2>&1
+   		start_all_daemons 2>&1
 
         if [ -f $BOTFORCERESTART ];
         then
@@ -136,7 +129,7 @@ case "$1" in
     ;;
 
 	is_at_home)
-		HOST=$(detect_host "proximity")
+		HOST=$(get_node_name "proximity")
 		if [ $HOST == "localhost" ];
 		then
 		#	echo "processing proximity query on $(host $(hostname) | awk '{ print $1 }')" >&2
@@ -147,7 +140,7 @@ case "$1" in
 	;;
 
     alert)
-		HOST=$(detect_host "alert")
+		HOST=$(get_node_name "alert")
 		if [ $HOST == "localhost" ];
 		then
 		#	echo "processing alert event on $(host $(hostname) | awk '{ print $1 }')" >&2
@@ -167,7 +160,7 @@ case "$1" in
 
 	## Raspbery Pi events
 	rasp)
-		HOST=$(detect_host "rasp")
+		HOST=$(get_node_name "rasp")
 		if [ $HOST == "localhost" ];
 		then
 		#	echo "processing rasp event on $(host $(hostname) | awk '{ print $1 }')" >&2
