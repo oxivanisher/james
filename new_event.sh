@@ -65,7 +65,7 @@ case "$1" in
     ;;
 
     cam_mov)
-        if [ is_at_home -eq 1 ];
+        if [ is_at_home == 1 ];
         then
             rm $2
         else
@@ -75,13 +75,13 @@ case "$1" in
     ;;
 
     cam_img)
-        if [ is_at_home -eq 1 ];
+        if [ is_at_home == 1 ];
         then
             rm $2
         else
-#           uuencode ${2} $(basename ${2}) | mail -s "Cam image event detected $(date +%H:%M:%S)" $EMAIL &
-			cp "${2}" $PROXTARGETDIR/
-            true
+			cp ${2} $DROPBOXDIR
+			chown $DROPBOXUSR $DROPBOXDIR$(basename ${2})
+			alert "New proximity file available: $DROPBOXURL$(basename ${2})"
         fi
         transfer_file $2 &
     ;;
