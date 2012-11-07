@@ -80,6 +80,7 @@ case "$1" in
             rm $2
         else
 #           uuencode ${2} $(basename ${2}) | mail -s "Cam image event detected $(date +%H:%M:%S)" $EMAIL &
+			cp "${2}" $PROXTARGETDIR/
             true
         fi
         transfer_file $2 &

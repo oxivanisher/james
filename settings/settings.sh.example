@@ -23,6 +23,8 @@ RSYNCTARGET="USER@HOST::PATH"
 ## Proximity Setting
 # You'll need to use the MAC address of your phone here
 PINGDEVICEMAC=""
+# Where should the capture image be copied? (Dropbox...)
+PROXTARGETDIR=""
 # The Computers MAC address
 COMPUTERMAC=""
 # The Computers network interface
