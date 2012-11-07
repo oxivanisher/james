@@ -65,7 +65,7 @@ case "$1" in
     ;;
 
     cam_mov)
-        if [ $PSTATE -eq 1 ];
+        if [ is_at_home -eq 1 ];
         then
             rm $2
         else
@@ -75,7 +75,7 @@ case "$1" in
     ;;
 
     cam_img)
-        if [ $PSTATE -eq 1 ];
+        if [ is_at_home -eq 1 ];
         then
             rm $2
         else
