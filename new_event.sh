@@ -79,9 +79,11 @@ case "$1" in
         then
             rm $2
         else
-			cp ${2} $DROPBOXDIR
-			chown $DROPBOXUSR $DROPBOXDIR$(basename ${2})
-			alert "New proximity file available: $DROPBOXURL$(basename ${2})"
+#			chown motion $DROPBOXDIR
+#			CPOUT=$(cp ${2} $DROPBOXDIR)
+#			CPOUT=$(cp ${2} /tmp)
+#			CHOWNOUT=$(chown $DROPBOXUSR $DROPBOXDIR$(basename ${2}))
+			alert "New proximity file available" #"$CPOUT; $CHOWNOUT; $DROPBOXURL$(basename ${2})"
         fi
         transfer_file $2 &
     ;;
