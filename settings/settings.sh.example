@@ -26,7 +26,6 @@ PINGDEVICEMAC=""
 # Where should the capture image be copied? (Dropbox...)
 DROPBOXDIR=""
 DROPBOXURL=""
-DROPBOXUSR=""
 # The Computers MAC address
 COMPUTERMAC=""
 # The Computers network interface

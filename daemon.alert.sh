@@ -18,9 +18,16 @@ do
         do
             if [ "a$LINE" != "a" ];
             then
-				TMPMSG=$(echo $LINE | sed 's/"//g')
-                echo -e "\tmsg: $TMPMSG"
-				$BASEDIR/scripts/alert.sh "$LINE"
+				#MYMSG=$(echo $LINE | awk '{ print $1 " " $2 " " $3}')
+				#CLEANMSG=$(echo $MYMSG | sed 's/"//g')
+#                echo -e "\tmsg: $CLEANMSG"
+#				HEAD=$(echo ${LINE} | awk '{ print $1 }')
+#				HEAD=$(eval $LINE | echo $1)
+#				BODY=$(echo ${LINE} | awk '{ print $2 }')
+				set -- $LINE
+                echo -e "\tmsg: $LINE ; $1 ; $2"
+#				$BASEDIR/scripts/alert.sh "$CLEANMSG"
+				$($BASEDIR/scripts/alert.sh "${LINE}")
                 sleep 0.5
             fi
         done < $ALERTMESSAGES.tmp

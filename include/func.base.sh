@@ -97,10 +97,6 @@ function alert {
 }
 
 function get_node_name {
-#	echo myip: $MYIP
-#	echo alerthost: $ALERTHOST
-#	MYIP=$(ifconfig  | grep 'inet addr:'| grep -v '127.0.0.1' | cut -d: -f2 | awk '{ print $1}')
-	TMPHOST="not_set"
 	case "$1" in
 		"alert")
 			TMPHOST=$ALERTNODE
@@ -115,19 +111,15 @@ function get_node_name {
 			TMPHOST=$JABBERNODE
 		;;
 		*)
-			echo "error, no module found."
-			TMPHOST=""
+			TMPHOST="module_found_$1"
 		;;
 	esac
 
-	if [ $TMPHOST == "" ];
-	then
-		echo "error_no_host_found"
-	elif [ $TMPHOST == $(hostname) ];
+	if [ $TMPHOST == $(hostname) ];
 	then
 		echo "localhost"
 	else
-		echo "$(host $TMPHOST | awk '{ print $1 }' | uniq)"
+		echo $TMPHOST
 	fi
 
 }
