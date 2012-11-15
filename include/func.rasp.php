@@ -13,7 +13,7 @@ function fancyInit($leds = array(), $buttons = array(), $switches = array()) {
 	echo "initializing leds: ";
 	foreach ($leds as $i) {
 		echo $i . " ";
-		blink($i, 2, 50000); }
+		blink($i, 3, 50000); }
 	echo "\n";
 
 	echo "initializing buttons: ";
@@ -104,6 +104,7 @@ function buttonCheck($pin, $reset = 0) {
     return false;
 }
 function sleepLoop($id) {
+	if (! isset($GLOBALS['quitCounter'][$id])) $GLOBALS['quitCounter'][$id] = 0;
 	$counter = $GLOBALS['quitCounter'][$id];
 	if ($counter >= ($GLOBALS['QUITTIME'] * round(1000000 / $GLOBALS['LOOPUSLEEP']))) {
 		alert("pressed button " . $id . " for " . $GLOBALS['QUITTIME'] . " seconds.\n");

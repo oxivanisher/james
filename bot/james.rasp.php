@@ -21,7 +21,7 @@ while ($run) {
 	$atHomeCheckLoop++;
 
 	#is our button pressed?
-	if (buttonCheck(7)) {
+	if (buttonCheck(4)) {
 			#for each button press, blink 1 additional time
 			$GLOBALS['POWERLEDBLINKNUM']++;
 			echo alert ("James Rasp is running since " . round(microtime(true) - $initTime) . " seconds.");
@@ -60,7 +60,7 @@ while ($run) {
 			$timeBetweenMainLoops = microtime(true);
 		}
 		#echo "main loop time interval: " . (microtime(true) - $timeBetweenMainLoops) . " seconds.\n";
-		$run = sleepLoop(7);
+		$run = sleepLoop(4);
 	}
 }
 
