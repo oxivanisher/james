@@ -123,6 +123,14 @@ class JamesBot(JabberBot):
 			return tr
 
 		@botcmd
+		def ra(self, mess, args):
+			"""Manage RabbitMQ"""
+			ra_pipe = os.popen('../scripts/rabbitmq.sh ' + args, 'r')
+			ra = ra_pipe.read().strip()
+			ra_pipe.close()
+			return ra
+
+		@botcmd
 		def xb(self, mess, args):
 			"""Manage XBMC"""
 			xb_pipe = os.popen('../scripts/xbmc.php ' + args, 'r')
