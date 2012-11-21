@@ -1,6 +1,7 @@
 <?php
 #helper functions
 function fancyInit($leds = array(), $buttons = array(), $switches = array()) {
+
 	if (count($leds) == 0) $leds = $GLOBALS['LEDS'];
 	if (count($buttons) == 0) $buttons = $GLOBALS['BUTTONS'];
 	if (count($switches) == 0) $switches = $GLOBALS['SWITCHES'];
@@ -10,13 +11,14 @@ function fancyInit($leds = array(), $buttons = array(), $switches = array()) {
 
 	initLoop($leds, $buttons);
 
-	echo "initializing leds: ";
+	echo "Starting RaspJames Bot:\n";
+	echo "\tInitializing leds: ";
 	foreach ($leds as $i) {
 		echo $i . " ";
 		blink($i, 3, 50000); }
 	echo "\n";
 
-	echo "initializing buttons: ";
+	echo "\tInitializing buttons: ";
 	foreach ($buttons as $i) {
 		echo $i . " ";
 		switchOn($i);
@@ -25,7 +27,7 @@ function fancyInit($leds = array(), $buttons = array(), $switches = array()) {
 	}
 	echo "\n";
 
-	echo "initializing switches: ";
+	echo "\tInitializing switches: ";
 	foreach ($switches as $i) {
 		echo $i . " ";
 		switchOn($i);
@@ -38,6 +40,7 @@ function fancyInit($leds = array(), $buttons = array(), $switches = array()) {
 	$GLOBALS['POWERLEDBLINKNUM'] = 1;
 
 	register_shutdown_function('quitLoop');
+	echo "Initialization done. Beginning to loop.\n";
 }
 function initLoop($leds = array(), $buttons = array(), $switches = array()) {
 	wiringPiSetup();
@@ -49,7 +52,7 @@ function initLoop($leds = array(), $buttons = array(), $switches = array()) {
 	asort($buttons);
 	asort($switches);
 
-	echo "resetting all lines...\n";
+	echo "Resetting all lines...\n";
 	for ($i=0; $i < 8; $i++) {
 		switchOff($i);
 		wiringpi::pinMode($i, 1);
@@ -90,14 +93,14 @@ function buttonCheck($pin, $reset = 0) {
             switchOff(1);
             $GLOBALS['quitCounter'][$pin] = 0;
             $GLOBALS['buttonLock'][$pin] = 0;
-            echo "button lock reset on pin " . $pin . "\n";
+            echo "BUTTON " . $pin . ": lock reset\n";
         }
     } else {
         switchOn(1);
         $GLOBALS['quitCounter'][$pin]++;
         if (($GLOBALS['buttonLock'][$pin] + $reset) < time()) {
             $GLOBALS['buttonLock'][$pin] = time();
-            echo "button " . $pin . " pressed and locked for " . $reset . " seconds.\n";
+            echo "BUTTON " . $pin . ": pressed and locked for " . $reset . " seconds.\n";
             return true;
         }
     }
@@ -107,7 +110,7 @@ function sleepLoop($id) {
 	if (! isset($GLOBALS['quitCounter'][$id])) $GLOBALS['quitCounter'][$id] = 0;
 	$counter = $GLOBALS['quitCounter'][$id];
 	if ($counter >= ($GLOBALS['QUITTIME'] * round(1000000 / $GLOBALS['LOOPUSLEEP']))) {
-		alert("pressed button " . $id . " for " . $GLOBALS['QUITTIME'] . " seconds.\n");
+		alert("BUTTON " . $id . ": pressed for " . $GLOBALS['QUITTIME'] . " seconds. exiting...\n");
 		blink(3, 5, 50000);
 		# this is our exit signal. rasp james will exit now
 		return false;

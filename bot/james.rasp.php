@@ -15,16 +15,17 @@ $timeBetweenMainLoops = $initTime;
 $timeBetweenMainLoopsCount = 0;
 
 #main loop
-echo "looping...\n";
 $run = true;
 while ($run) {
 	$atHomeCheckLoop++;
 
 	#is our button pressed?
 	if (buttonCheck(4)) {
-			#for each button press, blink 1 additional time
+			#for each button press, blink 1 additional time (just for fun :)
 			$GLOBALS['POWERLEDBLINKNUM']++;
-			echo alert ("James Rasp is running since " . round(microtime(true) - $initTime) . " seconds.");
+			#echo alert ("Toggle  Radio");
+			#round(microtime(true) - $initTime) . " seconds.");
+			system("/usr/bin/mpc -q toggle");
 	}
 
 	foreach ($GLOBALS['SWITCHES'] as $i) {
@@ -37,12 +38,12 @@ while ($run) {
 		}
 
 		if ($result) {
-			echo alert ("Switch " . $i . " changed state to: " . $str . "\n");
+			echo alert ("SWITCH " . $i . ": Changed state to: " . $str . "\n");
 		}
 	}
 		
 	if ($atHomeCheckLoop > $GLOBALS['ATHOMECHECKLOOPS']) {
-		echo "at home check time interval: " . round((microtime(true) - $timeBetweenHomeChecks), 2) . " seconds.\n";
+		echo "At home check time interval: " . round((microtime(true) - $timeBetweenHomeChecks), 2) . " seconds.\n";
 		$timeBetweenHomeChecks = microtime(true);
 		$atHomeCheckLoop = 0;
 		switchOff(3);
@@ -55,7 +56,7 @@ while ($run) {
 		$timeBetweenMainLoopsCount++;
 		if ($timeBetweenMainLoopsCount >= 10000) {
 		#	echo "it took " . (microtime(true) - $timeBetweenMainLoops) . " seconds for 10000 main loops.\n";
-			echo "main loop performance: ~" . round((10000 / (microtime(true) - $timeBetweenMainLoops)), 2) . " loops per second\n";
+			echo "Main loop performance: ~" . round((10000 / (microtime(true) - $timeBetweenMainLoops)), 2) . " loops per second\n";
 			$timeBetweenMainLoopsCount = 0;
 			$timeBetweenMainLoops = microtime(true);
 		}
