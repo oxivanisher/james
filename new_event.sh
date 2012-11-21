@@ -158,6 +158,12 @@ case "$1" in
 	;;
 
 
+	## RabbitMQ events
+	rabbitmq_status)
+		$BASEDIR/scripts/irabbitmqstatus.sh &
+	;;
+
+
 	## Raspbery Pi events
 	rasp)
 		HOST=$(get_node_name "rasp")
