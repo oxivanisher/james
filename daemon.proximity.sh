@@ -59,6 +59,8 @@ while /bin/true; do
 			done
 			alert "End of Log." &
 		fi
+
+		MPC=$(/usr/bin/mpc -h mpc play)
 	fi
 
 	sleep $PLONG
@@ -86,6 +88,8 @@ while /bin/true; do
             cd $INPWD
             alert "You left." &
             echo -e "$(date)\tmaster went away! i am now a watchdog"
+
+			MPC=$(/usr/bin/mpc -h mpc stop)
 
             STATE=0
 	fi

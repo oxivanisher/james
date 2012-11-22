@@ -28,7 +28,7 @@ class JamesBot(JabberBot):
 		@botcmd
 		def play(self, mess, args):
 			"""Music play"""
-			play_pipe = os.popen('mpc play','r')
+			play_pipe = os.popen('/usr/bin/mpc -h mpc play','r')
 			play = play_pipe.read().strip()
 			play_pipe.close()
 			return 'Starting to play\n'
@@ -36,41 +36,56 @@ class JamesBot(JabberBot):
 		@botcmd
 		def stop(self, mess, args):
 			"""Music stop"""
-			stop_pipe = os.popen('mpc stop','r')
+			stop_pipe = os.popen('/usr/bin/mpc -h mpc stop','r')
 			stop = stop_pipe.read().strip()
 			stop_pipe.close()
 			return 'Stopping music\n'
 
+		@botcmd
+		def toggle(self, mess, args):
+			"""Music toggle"""
+			toggle_pipe = os.popen('/usr/bin/mpc -h mpc toggle','r')
+			toggle = toggle_pipe.read().strip()
+			toggle_pipe.close()
+			return toggle + '\n'
 
 		@botcmd
-		def lspls(self, mess, args):
-			"""Lists all playlists"""
-			lspls_pipe = os.popen('ls /var/lib/mpd/playlists/ | sed s/.m3u//g','r')
-			lspls = lspls_pipe.read().strip()
-			lspls_pipe.close()
-			return 'Available playlists:\n' + lspls
+		def mpc(self, mess, args):
+			"""MPC interface"""
+			mpc_pipe = os.popen('/usr/bin/mpc -h mpc ' + args,'r')
+			mpc = mpc_pipe.read().strip()
+			mpc_pipe.close()
+			return mpc + '\n'
 
-		@botcmd
-		def ldpls(self, mess, args):
-			"""Load playlist"""
-			loadpls_pipe = os.popen('mpc clear && mpc load ' + args + ' && mpc play','r')
-			loadpls_pipe.close()
-			return 'MPC loading playlist: ' + args
-
-		@botcmd
-		def sleep(self, mess, args):
-			"""Music sleep timer"""
-			mpcsleep_pipe = os.popen('screen -dmS mpc_sleep ../scripts/mpc_sleep.sh','r')
-			mpcsleep_pipe.close()
-			return 'mpc sleepmode ENABLED.\nSleep well!'
-
-		@botcmd
-		def wakeup(self, mess, args):
-			"""Wakeup at given time"""
-			wakeup_pipe = os.popen('at -f ../scripts/mpc_wakeup.sh ' + args, 'r')
-			wakeup = wakeup_pipe.read().strip()
-			wakeup_pipe.close()
-			return 'MPC will wake you at: ' + args + '\n' + wakeup
+#		@botcmd
+#		def lspls(self, mess, args):
+#			"""Lists all playlists"""
+#			lspls_pipe = os.popen('ls /var/lib/mpd/playlists/ | sed s/.m3u//g','r')
+#			lspls = lspls_pipe.read().strip()
+#			lspls_pipe.close()
+#			return 'Available playlists:\n' + lspls
+#
+#		@botcmd
+#		def ldpls(self, mess, args):
+#			"""Load playlist"""
+#			loadpls_pipe = os.popen('mpc clear && mpc load ' + args + ' && mpc play','r')
+#			loadpls_pipe.close()
+#			return 'MPC loading playlist: ' + args
+#
+#		@botcmd
+#		def sleep(self, mess, args):
+#			"""Music sleep timer"""
+#			mpcsleep_pipe = os.popen('screen -dmS mpc_sleep ../scripts/mpc_sleep.sh','r')
+#			mpcsleep_pipe.close()
+#			return 'mpc sleepmode ENABLED.\nSleep well!'
+#
+#		@botcmd
+#		def wakeup(self, mess, args):
+#			"""Wakeup at given time"""
+#			wakeup_pipe = os.popen('at -f ../scripts/mpc_wakeup.sh ' + args, 'r')
+#			wakeup = wakeup_pipe.read().strip()
+#			wakeup_pipe.close()
+#			return 'MPC will wake you at: ' + args + '\n' + wakeup
 
 
 	################################
