@@ -11,6 +11,13 @@ $GLOBALS['trhost'] = "";
 $GLOBALS['trport'] = 9091;
 $GLOBALS['trurl']  = "/transmission/rpc";
 
+# XBMC Settings
+$GLOBALS['xbuser'] = "xbmc";
+$GLOBALS['xbpass'] = "";
+$GLOBALS['xbhost'] = "";
+$GLOBALS['xbport'] = 9090;
+$GLOBALS['xburl']  = "/jsonrpc";
+
 # Settings for RaspBerryPi James Module
 $GLOBALS['QUITTIME'] = 3;
 $GLOBALS['BUTTONRESET'] = 5;

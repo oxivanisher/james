@@ -1,22 +1,8 @@
 #!/usr/bin/php
 <?php
 
-#require_once("../settings/settings.php");
-
 # Settings for PHP scripts
-$GLOBALS['basedir'] = "/opt/james/";
-date_default_timezone_set('Europe/Zurich');
-
-
-# Transmission Settings
-$GLOBALS['xbuser'] = "xbmc";
-$GLOBALS['xbpass'] = "";
-$GLOBALS['xbhost'] = "xbmc.thunderbluff.ch";
-$GLOBALS['xbport'] = 9090;
-$GLOBALS['xburl']  = "/jsonrpc";
-
-
-#VideoLibrary.Scan
+require_once("/opt/james/settings/settings.php");
 
 # helper functions
 function returnStatus ($status) {
@@ -35,34 +21,7 @@ function returnStatus ($status) {
 }
 
 # system functions
-/*
-function checkSession () {
-	if (empty ($GLOBALS['trsid'])) {
-		echo "checking session\n";
-		$ch = curl_init();
-		# application/x-www-form-urlencoded.
-		curl_setopt($ch, CURLOPT_POST, true);
-		curl_setopt($ch, CURLOPT_USERPWD, $GLOBALS['xbuser'] . ":" . $GLOBALS['xbpass']);
-		curl_setopt($ch, CURLOPT_URL, "http://" . $GLOBALS['xbhost'] . ":" . $GLOBALS['xbport'] . $GLOBALS['xburl'] );
-		curl_setopt($ch, CURLOPT_HEADER, true);
-		curl_setopt($ch, CURLOPT_NOBODY, true);
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); 
-	
-		$header = curl_exec($ch);
-		$code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-		curl_close($ch);
-			echo "header:\n";
-			print_r($header);
-		preg_match("/^X-Transmission-Session-Id: (.*)$/m", $header, $return);
-
-		$GLOBALS['trsid'] = $return[1];	
-	} else {
-		die ("Could not connect to server: " . "http://" . $GLOBALS['trhost'] . ":" . $GLOBALS['trport'] . $GLOBALS['trurl']);
-	}
-}
-*/
-
-function query ($command, $arguments = null) {
+function query ($host, $command, $arguments = null) {
 	if ($arguments) {
 		$data_string = json_encode(array("jsonrpc" => "2.0", "id" => 1, "method" => $command, "params" => $arguments));
 	} else {
@@ -73,7 +32,7 @@ function query ($command, $arguments = null) {
 
 
 #	if ($fp = @fsockopen($GLOBALS['xbhost'], $GLOBALS['xbport'], $fsockErrNo, $fsockErrStr, 5)) {
-	if ($fp = @fsockopen($GLOBALS['xbhost'], $GLOBALS['xbport'])) {
+	if ($fp = @fsockopen($host, $GLOBALS['xbport'])) {
         $rawRequest = 'POST ' . $GLOBALS['xburl'] . ' HTTP/1.0' . PHP_EOL
                       . 'Content-type: text/json;charset=utf-8' . PHP_EOL
 #                      . 'X-Transmission-Session-Id: ' . $GLOBALS['trsid'] . PHP_EOL
@@ -109,8 +68,12 @@ if (empty($argv[1])) $argv[1] = null;
 
 switch ($argv[1]) {
 	case "update":
-		$data = query ("VideoLibrary.Scan");
-		echo (string) $data->result . "\n";
+		foreach ($GLOBALS['xbhost'] as $host) {
+			echo $host . ": ";
+			$data = query ($host, "VideoLibrary.Scan");
+			echo (string) $data->result;
+			echo "\n";
+		}
 	break;
 
 	case "notify":

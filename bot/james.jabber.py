@@ -28,7 +28,7 @@ class JamesBot(JabberBot):
 		@botcmd
 		def play(self, mess, args):
 			"""Music play"""
-			play_pipe = os.popen('/usr/bin/mpc -h mpc play','r')
+			play_pipe = os.popen('/usr/bin/mpc -h mpd play','r')
 			play = play_pipe.read().strip()
 			play_pipe.close()
 			return 'Starting to play\n'
@@ -36,7 +36,7 @@ class JamesBot(JabberBot):
 		@botcmd
 		def stop(self, mess, args):
 			"""Music stop"""
-			stop_pipe = os.popen('/usr/bin/mpc -h mpc stop','r')
+			stop_pipe = os.popen('/usr/bin/mpc -h mpd stop','r')
 			stop = stop_pipe.read().strip()
 			stop_pipe.close()
 			return 'Stopping music\n'
@@ -44,7 +44,7 @@ class JamesBot(JabberBot):
 		@botcmd
 		def toggle(self, mess, args):
 			"""Music toggle"""
-			toggle_pipe = os.popen('/usr/bin/mpc -h mpc toggle','r')
+			toggle_pipe = os.popen('/usr/bin/mpc -h mpd toggle','r')
 			toggle = toggle_pipe.read().strip()
 			toggle_pipe.close()
 			return toggle + '\n'
@@ -52,7 +52,7 @@ class JamesBot(JabberBot):
 		@botcmd
 		def mpc(self, mess, args):
 			"""MPC interface"""
-			mpc_pipe = os.popen('/usr/bin/mpc -h mpc ' + args,'r')
+			mpc_pipe = os.popen('/usr/bin/mpc -h mpd ' + args,'r')
 			mpc = mpc_pipe.read().strip()
 			mpc_pipe.close()
 			return mpc + '\n'
