@@ -12,7 +12,7 @@ fi
 
 echo -e "\nJames iproximity monitor is now starting"
 $BASEDIR/new_event.sh prx_went_away "Sleeping short ($PSHORT)"
-alert "James Services are now online." &
+$BASEDIR/new_event.sh alert "James Services are now online." "" &
 
 PONLINE=0;
 STATE=2
@@ -28,7 +28,7 @@ while /bin/true; do
             cd $BOTDIR
             ONLINE=$($WHOISONLINE)
             cd $INPWD
-            $BASEDIR/new_event.sh alert "Welcome! It is now $(date +%H:%M)." &
+            $BASEDIR/new_event.sh alert "Welcome! It is now $(date +%H:%M)." "" &
             echo -e "$(date) master came online"
 
             STATE=1
@@ -61,7 +61,7 @@ while /bin/true; do
             cd $BOTDIR
             ONLINE=$($WHOISONLINE)
             cd $INPWD
-            $BASEDIR/new_event.sh alert "You left." &
+            $BASEDIR/new_event.sh alert "You left." "" &
             echo -e "$(date)\tmaster went away! i am now a watchdog"
 
 			MPC=$(/usr/bin/mpc -h mpc stop)
