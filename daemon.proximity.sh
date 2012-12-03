@@ -28,7 +28,6 @@ while /bin/true; do
             cd $BOTDIR
             ONLINE=$($WHOISONLINE)
             cd $INPWD
-            $BASEDIR/new_event.sh alert "Welcome! It is now $(date +%H:%M)." "" &
             echo -e "$(date) master came online"
 
             STATE=1
