@@ -58,6 +58,14 @@ function query ($host, $command, $arguments = null) {
 	}
 }
 
+function query_multi_hosts($query, $args = array()) {
+	foreach ($GLOBALS['xbhost'] as $host) {
+		echo $host . ": ";
+		$data = query ($host, $query, $args);
+		echo (string) $data->result;
+		echo "\n";
+	}
+}
 
 #Here we go!
 #echo "Connecting to http://" . $GLOBALS['trhost'] . ":" . $GLOBALS['trport'] . $GLOBALS['trurl'] . "\n";
@@ -68,18 +76,11 @@ if (empty($argv[1])) $argv[1] = null;
 
 switch ($argv[1]) {
 	case "update":
-		foreach ($GLOBALS['xbhost'] as $host) {
-			echo $host . ": ";
-			$data = query ($host, "VideoLibrary.Scan");
-			echo (string) $data->result;
-			echo "\n";
-		}
+		$data = query_multi_hosts ("VideoLibrary.Scan");
 	break;
 
 	case "notify":
-		$data = query ("JSONRPC.NotifyAll", array("sender" => "xbmc.php", "message" => "test"));
-		print_r($data);
-		echo (string) $data->result . "\n";
+		$data = query_multi_hosts ("JSONRPC.NotifyAll", array("sender" => "xbmc.php", "message" => "test"));
 	break;
 
 	default:

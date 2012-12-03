@@ -169,14 +169,14 @@ class JamesBot(JabberBot):
 			at_pipe.close()
 			return 'Timer set!\n' + at
 
-	if os.path.isfile('/usr/bin/espeak'):
-		@botcmd
-		def say(self, mess, args):
-			"""Say some text"""
-			say_pipe = os.popen('/usr/bin/espeak "' + args + '"', 'r')
-			sayp = say_pipe.read().strip()
-			say_pipe.close()
-			return 'done\n' + sayp
+	#if os.path.isfile('/usr/bin/espeak'):
+	@botcmd
+	def say(self, mess, args):
+		"""Say some text"""
+		say_pipe = os.popen('/opt/james/new_event.sh alert "' + args + '"', 'r')
+		sayp = say_pipe.read().strip()
+		say_pipe.close()
+		return 'done\n' + sayp
 	
 	
 	################################

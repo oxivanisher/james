@@ -19,7 +19,6 @@ else
 	CLEANMSG=$(echo $1 $2 | sed 's/"//g')
 	echo -e "At $(date +%H:%M): $1" >> $ALERTCACHE
 	echo -e "$CLEANMSG" | $(which sendxmpp) -r Alert -u $XMPPUSER -p $XMPPPASS -j $XMPPDOMAIN $XMPPTARGET >/dev/null 2>&1 &
-
 fi
 
 echo -e "$(date +%H:%M:%S):\n$1\n\n" >>$ALERTLOG

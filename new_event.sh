@@ -146,7 +146,7 @@ case "$1" in
 		#	echo "processing alert event on $(host $(hostname) | awk '{ print $1 }')" >&2
 	        alert "$2" "$3"
 		else
-			ssh root@$HOST /opt/james/new_event.sh alert "$2" "$3"
+			ssh root@$HOST /opt/james/new_event.sh alert "\"$2\"" "\"$3\""
 		fi
     ;;
 

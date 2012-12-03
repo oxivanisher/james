@@ -28,13 +28,8 @@ while /bin/true; do
             cd $BOTDIR
             ONLINE=$($WHOISONLINE)
             cd $INPWD
-            alert "Welcome! It is now $(date +%H:%M)." &
+            $BASEDIR/new_event.sh alert "Welcome! It is now $(date +%H:%M)." &
             echo -e "$(date) master came online"
-
-			if [ -f $ALERTCACHE ];
-			then
-				READLOG=1
-			fi
 
             STATE=1
 	fi
@@ -42,26 +37,6 @@ while /bin/true; do
     echo 1 > $PSTATEFILE
 	$BASEDIR/new_event.sh prx_at_home "Sleeping long ($PLONG secs)"
     echo -e "$(date)\tsleeping for $PLONG seconds"
-
-	if [ $READLOG == 1 ];
-	then
-		LOGDATA=$(cat $ALERTCACHE)
-		rm $ALERTCACHE
-
-		if [ $(echo "$LOGDATA" | wc -l) == 1 ];
-		then
-			alert "Nothing happend while we where appart." &
-		else
-			alert "While we where appart, the following things happend:" &
-			echo -e "$LOGDATA" | while read LOGLINE;
-			do
-				alert "$LOGLINE" &
-			done
-			alert "End of Log." &
-		fi
-
-		MPC=$(/usr/bin/mpc -h mpc play)
-	fi
 
 	sleep $PLONG
 
@@ -86,7 +61,7 @@ while /bin/true; do
             cd $BOTDIR
             ONLINE=$($WHOISONLINE)
             cd $INPWD
-            alert "You left." &
+            $BASEDIR/new_event.sh alert "You left." &
             echo -e "$(date)\tmaster went away! i am now a watchdog"
 
 			MPC=$(/usr/bin/mpc -h mpc stop)
