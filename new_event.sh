@@ -81,7 +81,7 @@ case "$1" in
         then
             rm $2
         else
-			sudo $BASEDIR/new_event.sh alert "New proximity file available." "$DROPBOXURL$(basename ${2})"
+			sudo $BASEDIR/new_event.sh alert "New proximity file available." "$DROPBOXURL$(basename ${2})" &
 			echo "Movement image recorded"
 			cp ${2} $DROPBOXDIR
         fi
