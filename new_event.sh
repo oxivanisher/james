@@ -1,4 +1,5 @@
 #!/bin/bash
+PATH=$PATH:/sbin/
 source /opt/james/settings/settings.sh
 source $BASEDIR/include/func.*.sh
 
@@ -12,12 +13,12 @@ fi
 case "$1" in
     ## System events
     sys_reboot)
-        alert "$(hostname) is rebooting"
+        $BASEDIR/new_event.sh alert "$(hostname) is rebooting"
         reboot &
     ;;
 
     sys_poweroff)
-        alert "$(hostname) is powering down"
+        $BASEDIR/new_event.sh alert "$(hostname) is powering down"
         poweroff &
     ;;
 
@@ -51,7 +52,7 @@ case "$1" in
             JAMESCHECK=$(ps -ef | grep "python ./james.py" | grep -v grep | awk '{ print $2 }')
             if [ "a" != "a$JAMESCHECK" ];
             then
-                alert "Forced restarting Sir James"
+                $BASEDIR/new_event.sh alert "Forced restarting Sir James"
                 kill $JAMESCHECK
             fi
             rm $BOTFORCERESTART
@@ -61,26 +62,28 @@ case "$1" in
 
     ##Cam events
     cam_dc)
-        alert "Cam disconnected"
+        $BASEDIR/new_event.sh alert "Cam disconnected"
     ;;
 
     cam_mov)
-        if [ is_at_home == 1 ];
+        if [ $($BASEDIR/new_event.sh is_at_home) -eq 1 ];
         then
             rm $2
         else
-            alert "Movement detected" &
+			echo "Movement detected"
+            $BASEDIR/new_event.sh alert "Movement detected" &
         fi
         transfer_file $2 &
     ;;
 
     cam_img)
-        if [ is_at_home == 1 ];
+        if [ $($BASEDIR/new_event.sh is_at_home) -eq 1 ];
         then
             rm $2
         else
+			echo "Movement image recorded"
 			cp ${2} $DROPBOXDIR
-			alert "New proximity file available." "$DROPBOXURL$(basename ${2})"
+			$BASEDIR/new_event.sh alert "New proximity file available." "$DROPBOXURL$(basename ${2})"
         fi
         transfer_file $2 &
     ;;
@@ -119,7 +122,7 @@ case "$1" in
             NMAP=$(/usr/bin/nmap -O $1)
 			NBTSCAN=$(/usr/bin/nbtscan $1)
             echo -e "========= $HOSTNAME =========\nDate: $DATE\n\n$MACV\n\n$NBTSCAN\n\n$NMAP" >> $NEWFILE
-            alert "Unknown host $HOSTNAME scanned." # "\n$DATE\n$HOSTNAME\n$MACV\n$NMAPR"
+            $BASEDIR/new_event.sh alert "Unknown host $HOSTNAME scanned." # "\n$DATE\n$HOSTNAME\n$MACV\n$NMAPR"
         }
         scanHostRun $2 $3 &
     ;;
