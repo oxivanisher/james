@@ -23,9 +23,23 @@ while ($run) {
 	if (buttonCheck(4)) {
 			#for each button press, blink 1 additional time (just for fun :)
 			$GLOBALS['POWERLEDBLINKNUM']++;
+
+			$ret = system("/usr/bin/mpc | grep -v volume");
+
+			if (strpos($ret, "paused")) {
+				blink(2, 1, 50000);
+				echo system("/usr/bin/mpc -q toggle");
+			} elseif (strpos($ret, "playing")) {
+				blink(2, 2, 50000);
+				echo system("/root/scripts/mpc_radio_off.sh");
+			} else {
+				blink(2, 1, 50000);
+				echo system("/root/scripts/mpc_radio_on.sh");
+			}
+
 			#echo alert ("Toggle  Radio");
 			#round(microtime(true) - $initTime) . " seconds.");
-			system("/usr/bin/mpc -q toggle");
+			#system("/usr/bin/mpc -q toggle");
 	}
 
 	foreach ($GLOBALS['SWITCHES'] as $i) {
