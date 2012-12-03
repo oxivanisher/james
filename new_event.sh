@@ -70,10 +70,10 @@ case "$1" in
         then
             rm $2
         else
-            sudo $BASEDIR/new_event.sh alert "Movement detected" "" &
-			echo "Movement detected"
+			transfer_file $2 &
+			#sudo $BASEDIR/new_event.sh alert "Movement detected" "" &
+			#echo "Movement detected"
         fi
-        transfer_file $2 &
     ;;
 
     cam_img)
@@ -82,7 +82,7 @@ case "$1" in
             rm $2
         else
 			sudo $BASEDIR/new_event.sh alert "New proximity file available." "$DROPBOXURL$(basename ${2})" &
-			echo "Movement image recorded"
+			#echo "Movement image recorded"
 			cp ${2} $DROPBOXDIR
         fi
         transfer_file $2 &
