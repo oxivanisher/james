@@ -13,12 +13,12 @@ fi
 case "$1" in
     ## System events
     sys_reboot)
-        $BASEDIR/new_event.sh alert "$(hostname) is rebooting"
+        $BASEDIR/new_event.sh alert "$(hostname) is rebooting" ""
         reboot &
     ;;
 
     sys_poweroff)
-        $BASEDIR/new_event.sh alert "$(hostname) is powering down"
+        $BASEDIR/new_event.sh alert "$(hostname) is powering down" ""
         poweroff &
     ;;
 
@@ -52,7 +52,7 @@ case "$1" in
             JAMESCHECK=$(ps -ef | grep "python ./james.py" | grep -v grep | awk '{ print $2 }')
             if [ "a" != "a$JAMESCHECK" ];
             then
-                $BASEDIR/new_event.sh alert "Forced restarting Sir James"
+                $BASEDIR/new_event.sh alert "Forced restarting Sir James" ""
                 kill $JAMESCHECK
             fi
             rm $BOTFORCERESTART
@@ -62,7 +62,7 @@ case "$1" in
 
     ##Cam events
     cam_dc)
-        $BASEDIR/new_event.sh alert "Cam disconnected"
+        $BASEDIR/new_event.sh alert "Cam disconnected" ""
     ;;
 
     cam_mov)
@@ -71,7 +71,7 @@ case "$1" in
             rm $2
         else
 			echo "Movement detected"
-            $BASEDIR/new_event.sh alert "Movement detected" &
+            $BASEDIR/new_event.sh alert "Movement detected" "" &
         fi
         transfer_file $2 &
     ;;
@@ -122,7 +122,7 @@ case "$1" in
             NMAP=$(/usr/bin/nmap -O $1)
 			NBTSCAN=$(/usr/bin/nbtscan $1)
             echo -e "========= $HOSTNAME =========\nDate: $DATE\n\n$MACV\n\n$NBTSCAN\n\n$NMAP" >> $NEWFILE
-            $BASEDIR/new_event.sh alert "Unknown host $HOSTNAME scanned." # "\n$DATE\n$HOSTNAME\n$MACV\n$NMAPR"
+            $BASEDIR/new_event.sh alert "Unknown host $HOSTNAME scanned." "" # "\n$DATE\n$HOSTNAME\n$MACV\n$NMAPR"
         }
         scanHostRun $2 $3 &
     ;;
