@@ -6,6 +6,30 @@ alert "Alert daemon started"
 
 while true;
 do
+	if [ -f $ALERTCACHE ];
+	then
+		if [ $($BASEDIR/new_event.sh is_at_home) -eq 1 ];
+		then
+			LOGDATA=$(cat $ALERTCACHE) 
+			rm $ALERTCACHE 
+ 
+			if [ $(echo "$LOGDATA" | wc -l) == 1 ]; 
+			then 
+				$BASEDIR/new_event.sh alert "Nothing happend while we where appart." & 
+			else 
+				$BASEDIR/new_event.sh alert "While we where appart, the following things happend:" & 
+				echo -e "$LOGDATA" | while read LOGLINE; 
+				do 
+					$BASEDIR/new_event.sh alert "$LOGLINE" & 
+				done
+
+				$BASEDIR/new_event.sh alert "End of Log." & 
+			fi 
+ 
+			MPC=$(/root/scripts/mpc_radio_on.sh)
+		fi
+	fi
+
     if [ -f "$ALERTMESSAGES" ];
     then
 		echo "$(date) we have messages waiting"
@@ -29,29 +53,4 @@ do
     else
         sleep 1
     fi
-
-
-	if [ -f $ALERTCACHE ];
-	then
-		if [ $($BASEDIR/new_event.sh is_at_home) -eq 1 ];
-		then
-        LOGDATA=$(cat $ALERTCACHE) 
-        rm $ALERTCACHE 
- 
-        if [ $(echo "$LOGDATA" | wc -l) == 1 ]; 
-        then 
-            $BASEDIR/new_event.sh alert "Nothing happend while we where appart." & 
-        else 
-            $BASEDIR/new_event.sh alert "While we where appart, the following things happend:" & 
-            echo -e "$LOGDATA" | while read LOGLINE; 
-            do 
-                $BASEDIR/new_event.sh alert "$LOGLINE" & 
-            done 
-            $BASEDIR/new_event.sh alert "End of Log." & 
-        fi 
- 
-        MPC=$(/root/scripts/mpc_radio_on.sh)
-
-		fi
-	fi
 done

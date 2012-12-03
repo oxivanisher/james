@@ -61,7 +61,7 @@ while /bin/true; do
             cd $BOTDIR
             ONLINE=$($WHOISONLINE)
             cd $INPWD
-            $BASEDIR/new_event.sh alert "You left." "" &
+            $BASEDIR/new_event.sh alert "You left." "really" &
             echo -e "$(date)\tmaster went away! i am now a watchdog"
 
 			MPC=$(/usr/bin/mpc -h mpc stop)

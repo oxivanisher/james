@@ -62,7 +62,7 @@ case "$1" in
 
     ##Cam events
     cam_dc)
-        $BASEDIR/new_event.sh alert "Cam disconnected" ""
+        sudo $BASEDIR/new_event.sh alert "Cam disconnected" ""
     ;;
 
     cam_mov)
@@ -70,8 +70,8 @@ case "$1" in
         then
             rm $2
         else
+            sudo $BASEDIR/new_event.sh alert "Movement detected" "" &
 			echo "Movement detected"
-            $BASEDIR/new_event.sh alert "Movement detected" "" &
         fi
         transfer_file $2 &
     ;;
@@ -81,9 +81,9 @@ case "$1" in
         then
             rm $2
         else
+			sudo $BASEDIR/new_event.sh alert "New proximity file available." "$DROPBOXURL$(basename ${2})"
 			echo "Movement image recorded"
 			cp ${2} $DROPBOXDIR
-			$BASEDIR/new_event.sh alert "New proximity file available." "$DROPBOXURL$(basename ${2})"
         fi
         transfer_file $2 &
     ;;
@@ -149,6 +149,7 @@ case "$1" in
 		#	echo "processing alert event on $(host $(hostname) | awk '{ print $1 }')" >&2
 	        alert "$2" "$3"
 		else
+			echo "2: $2, 3: $3"
 			ssh root@$HOST /opt/james/new_event.sh alert "\"$2\"" "\"$3\""
 		fi
     ;;
@@ -163,7 +164,7 @@ case "$1" in
 
 	## RabbitMQ events
 	rabbitmq_status)
-		$BASEDIR/scripts/irabbitmqstatus.sh &
+		$BASEDIR/scripts/rabbitmqstatus.sh &
 	;;
 
 
